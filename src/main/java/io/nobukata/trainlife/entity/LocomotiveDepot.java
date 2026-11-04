@@ -18,7 +18,7 @@ public class LocomotiveDepot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "railway_id")
     private Railway railway;
 
