@@ -22,15 +22,17 @@ public class User {
     @JoinColumn(name = "account_id", nullable = false, unique = true)
     private Account account;
 
+    private String nickname;
+
     @JoinColumn(name = "full_name")
     private String fullName;
 
-    @JoinColumn(name = "birth_date")
+    @JoinColumn(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
     private String position;
 
-    @JoinColumn(name = "column_number")
+    @JoinColumn(name = "number_of_column")
     private Integer numberOfColumn;
 
     @JoinColumn(name = "personnel_number")
