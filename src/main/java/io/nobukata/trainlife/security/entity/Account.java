@@ -32,6 +32,9 @@ public class Account implements UserDetails {
     @Column(nullable = false)
     private Role role;
 
+    @Column(name = "was_introduced", nullable = false)
+    private Boolean wasIntroduced = false;
+
     @OneToOne(mappedBy = "account",     //.:: класс Account не управляет внешним ключом: это делает User
             cascade = CascadeType.ALL,  //.:: одним вызовом accountRepository.save() сохранится и Account, и User
             orphanRemoval = true,   //.:: работает в паре с Cascade: отвяжешь User от Account - Hibernate удалит User

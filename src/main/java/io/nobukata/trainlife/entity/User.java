@@ -24,30 +24,35 @@ public class User {
 
     private String nickname;
 
-    @JoinColumn(name = "full_name")
+    @Column(name = "full_name")
     private String fullName;
 
-    @JoinColumn(name = "date_of_birth")
+    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
     private String position;
 
-    @JoinColumn(name = "number_of_column")
+    @Column(name = "number_of_column")
     private Integer numberOfColumn;
 
-    @JoinColumn(name = "personnel_number")
+    @Column(name = "personnel_number")
     private Integer personnelNumber;
 
-    @JoinColumn(name = "long_personnel_number")
-    private Integer long_personnelNumber;
+    @Column(name = "long_personnel_number")
+    private Integer longPersonnelNumber;
 
-    @JoinColumn(name = "traction_kind")
+    @Column(name = "traction_kind")
     private String tractionKind;
 
-    @JoinColumn(name = "service_type")
+    @Column(name = "service_type")
     private String serviceType;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "locomotive_depot_id")
     private LocomotiveDepot locomotiveDepot;
+
+
+    public void setDepotId(Long depotId) {
+        this.locomotiveDepot.setId(depotId);
+    }
 }

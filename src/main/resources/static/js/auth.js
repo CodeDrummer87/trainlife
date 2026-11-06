@@ -8,7 +8,9 @@ async function login(username, password) {
     if (res.ok) {
         const data = await res.json();
         if (data.role === 'ROLE_ADMIN') window.location.href = '/admin';
-        else window.location.href = '/account';
+        else {
+            window.location.href = !data.wasIntroduced ? '/introduce' : '/account';
+        }
         return true;
     }
     const err = await res.json().catch(() => ({}));

@@ -1,5 +1,6 @@
 package io.nobukata.trainlife.security.rest;
 
+import io.nobukata.trainlife.security.entity.Account;
 import io.nobukata.trainlife.security.service.AccountService;
 import io.nobukata.trainlife.security.service.JwtService;
 import jakarta.validation.Valid;
@@ -58,11 +59,13 @@ public class AuthController {
             ResponseCookie cookie = buildCookie(token);
 
             log.info("Успешный вход в систему пользователя: {}", req.username());
+            Account account = (Account) auth.getPrincipal();
             return ResponseEntity.ok()
                     .header(HttpHeaders.SET_COOKIE, cookie.toString())
                     .body(Map.of(
                             "username", user.getUsername(),
-                            "role", user.getAuthorities().iterator().next().getAuthority()));
+                            "role", user.getAuthorities().iterator().next().getAuthority(),
+                            "wasIntroduced", account.getWasIntroduced()));
         } catch (BadCredentialsException e) {
             log.warn("Ошибка входа в систему (неверные учётные данные): {}", req.username());
             throw e;   //.:: 401 от GlobalExceptionHandler
@@ -72,14 +75,6 @@ public class AuthController {
         }
     }
 
-//    @PostMapping("/logout")
-//    public ResponseEntity<?> logout() {
-//        ResponseCookie cookie = ResponseCookie.from(cookieName, "")
-//                .httpOnly(httpOnly).secure(secure).path("/").maxAge(0).build();
-//        return ResponseEntity.ok()
-//                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-//                .body(Map.of("message", "logged out"));
-//    }
     @PostMapping("/logout")
     public ResponseEntity<?> logout(Authentication authentication) {
         if (authentication != null) {

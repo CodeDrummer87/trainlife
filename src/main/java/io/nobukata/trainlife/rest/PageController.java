@@ -26,6 +26,11 @@ public class PageController {
         return "forward:/html/register.html";
     }
 
+    @GetMapping("/introduce")
+    public String introduce() {
+        return "forward:/html/introduce.html";
+    }
+
     @GetMapping("/account")
     public String account() {
         return "forward:/html/account.html";

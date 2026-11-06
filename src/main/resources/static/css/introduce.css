@@ -1,0 +1,213 @@
+:root {
+    --primary: #2f6feb;
+    --primary-hover: #1f5bd0;
+    --bg: #f4f6fb;
+    --card-bg: #ffffff;
+    --text: #1f2733;
+    --muted: #6b7686;
+    --border: #dfe4ec;
+    --shadow: 0 10px 30px rgba(31, 39, 51, 0.08);
+    --error: #d64545;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: radial-gradient(circle at 20% 0%, #e8efff 0%, var(--bg) 45%);
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.container {
+    width: 100%;
+    max-width: 520px;
+    position: relative;
+}
+
+.progress {
+    display: flex;
+    gap: 8px;
+    margin-top: -80px;
+    margin-bottom: 24px;
+    justify-content: center;
+}
+.progress .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+.progress .dot.active {
+    background: var(--primary);
+    transform: scale(1.25);
+}
+.progress .dot.done {
+    background: #9bb8f5;
+}
+
+.stage {
+    position: relative;
+    min-height: 425px;
+}
+
+.form-card {
+    position: absolute;
+    inset: 0;
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 28px 26px 26px;
+    border: 1px solid rgba(223, 228, 236, 0.6);
+
+    opacity: 0;
+    transform: translateX(-60px);
+    pointer-events: none;
+    transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.form-card.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+    z-index: 2;
+}
+
+.form-card.leave-left {
+    opacity: 0;
+    transform: translateX(-60px);
+}
+
+.form-card h2 {
+    margin: 0 0 6px;
+    font-size: 1.2rem;
+    letter-spacing: -0.01em;
+}
+
+.form-card .hint {
+    margin: 0 0 20px;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.field {
+    margin-bottom: 16px;
+}
+
+.field:last-of-type {
+    margin-bottom: 22px;
+}
+
+label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+}
+
+input, select {
+    width: 100%;
+    padding: 11px 13px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--text);
+    background: #fbfcfe;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    appearance: none;
+}
+
+select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%236b7686' d='M1 1l5 5 5-5'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 38px;
+}
+
+select:disabled {
+    cursor: not-allowed;
+}
+
+input:focus, select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(47, 111, 235, 0.15);
+    background: #fff;
+}
+
+input::placeholder {
+    color: #a9b2c1;
+}
+
+.row {
+    display: flex;
+    gap: 14px;
+}
+
+.row .field {
+    flex: 1;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+button {
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 11px 22px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+.btn-next, .btn-save {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(47, 111, 235, 0.28);
+}
+
+.btn-next:hover, .btn-save:hover:not(:disabled) {
+    background: var(--primary-hover);
+}
+
+.btn-back {
+    background: transparent;
+    color: var(--muted);
+}
+
+.btn-back:hover {
+    color: var(--text); background: #eef1f7;
+}
+
+.btn-save:disabled {
+    background: #c8d2e2;
+    box-shadow: none;
+    cursor: not-allowed;
+    color: #f4f6fb;
+}
+
+@media (max-width: 480px) {
+    .form-card { padding: 22px 18px; }
+    .row { flex-direction: column; gap: 0; }
+}
