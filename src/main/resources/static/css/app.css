@@ -1,0 +1,31 @@
+@font-face {
+    font-family: 'Copperplate';
+    src: url('../fonts/Copperplate.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Fet';
+    src: url('../fonts/Fet.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vivl_Rail';
+    src: url('../fonts/Vivl_Rail.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SonyEricssonLogo';
+    src: url('../fonts/SonyEricssonLogo.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

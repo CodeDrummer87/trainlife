@@ -5,9 +5,10 @@
     --card-bg: #ffffff;
     --text: #1f2733;
     --muted: #6b7686;
-    --border: #dfe4ec;
+    --border: #e3e5e8;
     --shadow: 0 10px 30px rgba(31, 39, 51, 0.08);
     --error: #d64545;
+    --success: #3ab313;
 }
 
 * { box-sizing: border-box; }
@@ -205,6 +206,19 @@ button:active {
     box-shadow: none;
     cursor: not-allowed;
     color: #f4f6fb;
+}
+
+.toast {
+    font-family: Fet, serif;
+    font-size: 1.4rem;
+    position: fixed;
+    bottom: 73%;
+    left: 75%;
+    transform: translateX(-50%);
+    color: var(--success);
+    padding: 12px 20px;
+    border-radius: 10px;
+    z-index: 100;
 }
 
 @media (max-width: 480px) {

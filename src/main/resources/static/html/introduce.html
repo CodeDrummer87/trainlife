@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Знакомство</title>
+    <link rel="stylesheet" href="../css/app.css">
     <link rel="stylesheet" href="../css/introduce.css">
 </head>
 <body>
@@ -23,7 +24,6 @@
                 <div class="actions">
                     <button type="button" class="btn-next">Далее →</button>
                 </div>
-                <p id="railwayError" class="hint" style="color: var(--error); display: none;"></p>
             </form>
 
 
@@ -32,7 +32,9 @@
                 <p class="hint">Укажите депо, к которому вы приписаны</p>
                 <div class="field">
                     <label for="depot">Локомотивное депо</label>
-                    <input type="text" id="depot" name="depot" placeholder="Например, ТЧ-1" required>
+                    <select id="depot" name="depot" required>
+                        <option value="" disabled selected>Загрузка…</option>
+                    </select>
                 </div>
                 <div class="actions">
                     <button type="button" class="btn-back">← Назад</button>
@@ -64,12 +66,8 @@
 
 
             <form class="form-card" data-step="4" autocomplete="off">
-                <h2>Условия работы</h2>
-                <p class="hint">Колонна, вид движения и тяги</p>
-                <div class="field">
-                    <label for="column">Номер колонны</label>
-                    <input type="text" id="column" name="column" placeholder="Например, 3" required>
-                </div>
+                <h2>Профиль работы</h2>
+                <p class="hint">Вид движения, вид тяги и колонна</p>
                 <div class="field">
                     <label for="traffic">Вид движения</label>
                     <select id="traffic" name="traffic" required>
@@ -87,6 +85,10 @@
                         <option>Тепловоз</option>
                     </select>
                 </div>
+                <div class="field">
+                    <label for="column">Номер колонны</label>
+                    <input type="text" id="column" name="column" placeholder="Например, 3" required>
+                </div>
                 <div class="actions">
                     <button type="button" class="btn-back">← Назад</button>
                     <button type="button" class="btn-next">Далее →</button>
@@ -99,7 +101,7 @@
                 <p class="hint">ФИО и день рождения — мы вас поздравим!</p>
                 <div class="field">
                     <label for="fio">Фамилия Имя Отчество</label>
-                    <input type="text" id="fio" name="fio" placeholder="Иванов Иван Иванович" required>
+                    <input type="text" id="fio" name="fio" placeholder="Иванов Иван Иванович" required autofocus>
                 </div>
                 <div class="field">
                     <label for="birthday">День рождения</label>
@@ -114,9 +116,9 @@
 
             <form class="form-card" data-step="6" autocomplete="off">
                 <h2>Почти готово</h2>
-                <p class="hint">Придумайте nickname для сайта</p>
+                <p class="hint">Придумайте псевдоним для сайта</p>
                 <div class="field">
-                    <label for="nickname">Nickname</label>
+                    <label for="nickname">Псевдоним</label>
                     <input type="text" id="nickname" name="nickname" placeholder="Ваш псевдоним" required>
                 </div>
                 <div class="actions">
@@ -124,10 +126,11 @@
                     <button type="submit" class="btn-save" id="saveBtn" disabled>Сохранить</button>
                 </div>
             </form>
-
+            <p id="introduceCurrentMessage" class="toast">&nbsp;</p>
         </div>
     </div>
 
+    <script src="../js/app.js"></script>
     <script src="../js/introduce.js"></script>
 </body>
 </html>

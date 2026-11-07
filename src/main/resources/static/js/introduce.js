@@ -1,19 +1,28 @@
-document.addEventListener('DOMContentLoaded', async function () {
+const introduceCurrentMessage = document.getElementById('introduceCurrentMessage');
 
+document.addEventListener("DOMContentLoaded", function() {
+
+    const progress = document.getElementById('progress');
     const stage = document.getElementById('stage');
     const forms = Array.from(stage.querySelectorAll('.form-card'));
-    const progress = document.getElementById('progress');
     const saveBtn = document.getElementById('saveBtn');
 
-    let current = 0;
+    const railway = document.getElementById('railway');
 
-    // строим индикатор прогресса
-    forms.forEach((_, i) => {
+//region .:: Progress bar
+    for (let i = 0; i < forms.length; i++) {
         const dot = document.createElement('span');
         dot.className = 'dot' + (i === 0 ? ' active' : '');
         progress.appendChild(dot);
-    });
+    }
+
+    let current = 0;
+
     const dots = Array.from(progress.children);
+    for (let i = 0; i < dots.length; i++) {
+        dots[i].classList.toggle('active', i === current);
+        dots[i].classList.toggle('done', i < current);
+    }
 
     function updateDots() {
         dots.forEach((dot, i) => {
@@ -21,38 +30,15 @@ document.addEventListener('DOMContentLoaded', async function () {
             dot.classList.toggle('done', i < current);
         });
     }
+//endregion
 
-    function goTo(index) {
-        if (index < 0 || index >= forms.length) return;
-
-        const outgoing = forms[current];
-        const incoming = forms[index];
-
-        // уходящая форма сдвигается влево и исчезает
-        outgoing.classList.remove('active');
-        outgoing.classList.add('leave-left');
-
-        // входящая появляется из левого сдвига
-        // (сброс положения без анимации, затем активация)
-        incoming.style.transition = 'none';
-        incoming.classList.remove('active', 'leave-left');
-        incoming.style.transform = 'translateX(-60px)';
-        incoming.style.opacity = '0';
-
-        // принудительный reflow, чтобы браузер применил сброс
-        void incoming.offsetWidth;
-
-        incoming.style.transition = '';
-        incoming.style.transform = '';
-        incoming.style.opacity = '';
-        incoming.classList.add('active');
-
-        current = index;
-        updateDots();
-        checkComplete();
+    loadRailways();
+    railway.onchange = async function(e) {
+        const railwayId = e.target.value;
+        if (!railwayId) return;
+        await loadLocomotiveDepots(railwayId);
     }
 
-    // проверка заполненности всех форм — только она определяет активность кнопки
     function checkComplete() {
         let allFilled = true;
         forms.forEach(form => {
@@ -65,8 +51,33 @@ document.addEventListener('DOMContentLoaded', async function () {
         saveBtn.disabled = !allFilled;
     }
 
-    // кнопки "Далее" и "Назад"
-    stage.addEventListener('click', (e) => {
+    function goTo(index) {
+        if (index < 0 || index >= forms.length) return;
+
+        const outgoing = forms[current];
+        const incoming = forms[index];
+
+        outgoing.classList.remove('active');
+        outgoing.classList.add('leave-left');
+
+        incoming.style.transition = 'none';
+        incoming.classList.remove('active', 'leave-left');
+        incoming.style.transform = 'translateX(-60px)';
+        incoming.style.opacity = '0';
+
+        void incoming.offsetWidth;
+
+        incoming.style.transition = '';
+        incoming.style.transform = '';
+        incoming.style.opacity = '';
+        incoming.classList.add('active');
+
+        current = index;
+        updateDots();
+        checkComplete();
+    }
+
+    stage.onclick = (e) => {
         const btn = e.target.closest('button');
         if (!btn) return;
 
@@ -77,96 +88,78 @@ document.addEventListener('DOMContentLoaded', async function () {
             e.preventDefault();
             goTo(current - 1);
         }
-    });
+    };
 
-    // слушаем изменения во всех полях, чтобы пересчитывать валидность
     stage.addEventListener('input', checkComplete);
     stage.addEventListener('change', checkComplete);
+});
 
-    // отправка формы
-    const lastForm = forms[forms.length - 1];
-    lastForm.addEventListener('submit', (e) => {
-        if (saveBtn.disabled) {
-            e.preventDefault();
+async function loadRailways() {
+    const select = document.getElementById('railway');
+
+    try {
+        const result = await fetch(URI + "/railways", {
+            headers: { 'Accept': 'application/json' },
+            credentials: 'include'
+        });
+
+        if (!result.ok) {
+            displayMessage(introduceCurrentMessage, 'Ошибка загрузки данных', false);
+            throw new Error(`HTTP ${result.status}`);
+        }
+
+        const railways = await result.json();
+
+        select.replaceChildren();
+        const placeholder = createDefaultOption('— выберите —');
+        select.appendChild(placeholder);
+
+        railways
+            .slice()
+            .forEach(r => {
+                const opt = createOption(r.id, `${r.fullTitle} (${r.abbreviation})`);
+                select.appendChild(opt);
+            });
+    } catch (err) {
+        displayMessage(introduceCurrentMessage, 'Не удалось загрузить список железных дорог', false);
+        select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
+        select.disabled = true;
+    }
+}
+
+async function loadLocomotiveDepots(railwayId) {
+    const select = document.getElementById('depot');
+
+    try {
+        const result = await fetch(URI + `/locomotive-depots/by-railway/${railwayId}`, {
+            headers: { 'Accept': 'application/json' },
+            credentials: 'include'
+        });
+
+        if (!result.ok) {
+            displayMessage(introduceCurrentMessage, 'Ошибка загрузки данных', false);
+            throw new Error(`HTTP ${result.status}`);
+        }
+
+        const depots = await result.json();
+
+        select.replaceChildren();
+        const placeholder = createDefaultOption('— выберите —');
+        select.appendChild(placeholder);
+
+        if (depots.length === 0) {
+            select.appendChild(createDefaultOption('список пуст'))
             return;
         }
-        // Здесь можно собрать данные и отправить на сервер.
-        e.preventDefault();
-        const data = new FormData();
-        forms.forEach(form => {
-            new FormData(form).forEach((v, k) => data.append(k, v));
-        });
-        console.log('Данные для сохранения:', Object.fromEntries(data.entries()));
-        // alert('Данные готовы к сохранению (см. консоль).');
-        const payload = Object.fromEntries(data.entries());
-        submitIntroduce(payload);
-    });
-
-    async function loadRailways() {
-        const select = document.getElementById('railway');
-        const errorEl = document.getElementById('railwayError');
-
-        try {
-            const res = await fetch("/api/v1/railways", {
-                headers: { 'Accept': 'application/json' }
+        depots
+            .slice()
+            .forEach(d => {
+                const opt = createOption(d.id, d.shortTitle);
+                select.appendChild(opt);
             });
-
-            if (!res.ok) {
-                throw new Error(`HTTP ${res.status}`);
-            }
-
-            const railways = await res.json();
-
-            // очищаем placeholder
-            select.innerHTML = '';
-
-            // placeholder-опция
-            const placeholder = document.createElement('option');
-            placeholder.value = '';
-            placeholder.disabled = true;
-            placeholder.selected = true;
-            placeholder.textContent = '— выберите —';
-            select.appendChild(placeholder);
-
-            // сортируем по полному названию (по желанию)
-            railways
-                .slice()
-                .sort((a, b) => a.fullTitle.localeCompare(b.fullTitle, 'ru'))
-                .forEach(r => {
-                    const opt = document.createElement('option');
-                    opt.value = r.id;                                   // что уйдёт на сервер
-                    opt.textContent = `${r.fullTitle} (${r.abbreviation})`; // что видит пользователь
-                    select.appendChild(opt);
-                });
-        } catch (err) {
-            console.error('Не удалось загрузить список железных дорог:', err);
-            select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
-            select.disabled = true;
-            errorEl.textContent = 'Не удалось загрузить список железных дорог. Обновите страницу.';
-            errorEl.style.display = 'block';
-        }
+    } catch (err) {
+        displayMessage(introduceCurrentMessage, 'Не удалось загрузить список депо для данной дороги', false);
+        select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
+        select.disabled = true;
     }
-
-    loadRailways();
-
-    checkComplete();
-
-
-    async function submitIntroduce(formData) {
-        const res = await fetch('/api/v1/users/introduce', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            credentials: 'include',          // JWT-cookie
-            body: JSON.stringify(formData)
-        });
-        if (res.ok) {
-            setTimeout(() => {
-                window.location.href = '/account';
-            }, 2500);
-            return true;
-        }
-        const err = await res.json().catch(() => ({}));
-        document.getElementById('error').textContent = err.error || 'Ошибка';
-        return false;
-    }
-});
+}
