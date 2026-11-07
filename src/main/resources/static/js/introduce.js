@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", async function() {
     const tabnum = document.getElementById('tabnum');
     const tabnum_long = document.getElementById('tabnum_long');
     const traffic = document.getElementById('traffic');
+    const traction = document.getElementById('traction');
+    const column = document.getElementById('column');
+    const fullname = document.getElementById('fullname');
 
 //region .:: Progress bar
     for (let i = 0; i < forms.length; i++) {
@@ -60,6 +63,17 @@ document.addEventListener("DOMContentLoaded", async function() {
         }
     }
     await loadServiceTypes(traffic);
+    await loadTractionKinds(traction);
+    traction.onchange = function() {
+        column.focus();
+    }
+    column.onkeydown = function (e) {
+        checkAvailableInput(this, 2);
+        if (e.key === 'Enter' || e.key === 'Tab') {
+            goTo(current + 1);
+            fullname.focus();
+        }
+    }
 //endregion
 
 
@@ -246,6 +260,38 @@ async function loadServiceTypes(select) {
             });
     } catch (err) {
         displayMessage(introduceCurrentMessage, 'Не удалось загрузить виды движения', false);
+        select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
+        select.disabled = true;
+    }
+}
+
+async function loadTractionKinds(select) {
+
+    try {
+        const result = await fetch(URI + "/traction-kinds", {
+            headers: { 'Accept': 'application/json' },
+            credentials: 'include'
+        });
+
+        if (!result.ok) {
+            displayMessage(introduceCurrentMessage, 'Ошибка загрузки данных', false);
+            throw new Error(`HTTP ${result.status}`);
+        }
+
+        const tractionKinds = await result.json();
+
+        select.replaceChildren();
+        const placeholder = createDefaultOption('— выберите вид тяги —');
+        select.appendChild(placeholder);
+
+        tractionKinds
+            .slice()
+            .forEach(r => {
+                const opt = createOption(r.id, r.title);
+                select.appendChild(opt);
+            });
+    } catch (err) {
+        displayMessage(introduceCurrentMessage, 'Не удалось загрузить виды тяги', false);
         select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
         select.disabled = true;
     }

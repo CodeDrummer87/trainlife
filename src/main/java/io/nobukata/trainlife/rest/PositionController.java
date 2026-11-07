@@ -21,7 +21,7 @@ public class PositionController {
 
 
     @GetMapping
-    public ResponseEntity<List<PositionDto>> findAll() {
-        return ResponseEntity.ok(positionService.findAll());
+    public ResponseEntity<List<PositionDto>> getAllPositions() {
+        return ResponseEntity.ok(positionService.getAllPositions());
     }
 }

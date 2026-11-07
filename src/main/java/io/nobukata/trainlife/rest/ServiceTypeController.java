@@ -22,6 +22,6 @@ public class ServiceTypeController {
 
     @GetMapping
     public ResponseEntity<List<ServiceTypeDto>> findAll() {
-        return ResponseEntity.ok(serviceTypeService.findAll());
+        return ResponseEntity.ok(serviceTypeService.getAllServiceTypes());
     }
 }

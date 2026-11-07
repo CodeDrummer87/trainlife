@@ -15,7 +15,7 @@ public class RailwayService {
         this.railwayRepository = railwayRepository;
     }
 
-    public List<RailwayDto> findAllRailways() {
+    public List<RailwayDto> getAllRailways() {
         return railwayRepository.findAll().stream()
                 .map(r -> new RailwayDto(
                         r.getId(),

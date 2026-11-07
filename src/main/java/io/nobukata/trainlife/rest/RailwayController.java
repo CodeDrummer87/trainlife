@@ -22,7 +22,7 @@ public class RailwayController {
 
 
     @GetMapping
-    public ResponseEntity<List<RailwayDto>> findAll() {
-        return ResponseEntity.ok(railwayService.findAllRailways());
+    public ResponseEntity<List<RailwayDto>> getAllRailways() {
+        return ResponseEntity.ok(railwayService.getAllRailways());
     }
 }

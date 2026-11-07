@@ -16,7 +16,7 @@ public class LocomotiveDepotService {
     }
 
 
-    public List<LocomotiveDepotAbbreviateDto> findAllByRailwayId(Long railwayId) {
+    public List<LocomotiveDepotAbbreviateDto> getAllDepotsByRailwayId(Long railwayId) {
         return locomotiveDepotRepository.findByRailwayId(railwayId).stream()
                 .map(d -> new LocomotiveDepotAbbreviateDto(
                         d.getId(),

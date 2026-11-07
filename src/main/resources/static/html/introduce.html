@@ -47,7 +47,7 @@
                 <h2>Служебные данные</h2>
                 <p class="hint">Должность и табельные номера</p>
                 <div class="field">
-                    <label for="position">Железная дорога</label>
+                    <label for="position">Должность</label>
                     <select id="position" name="position" required>
                         <option value="" disabled selected>Загрузка…</option>
                     </select>
@@ -71,7 +71,7 @@
                 <h2>Профиль работы</h2>
                 <p class="hint">Вид движения, вид тяги и колонна</p>
                 <div class="field">
-                    <label for="traffic">Железная дорога</label>
+                    <label for="traffic">Вид движения</label>
                     <select id="traffic" name="traffic" required>
                         <option value="" disabled selected>Загрузка…</option>
                     </select>
@@ -79,9 +79,7 @@
                 <div class="field">
                     <label for="traction">Вид тяги</label>
                     <select id="traction" name="traction" required>
-                        <option value="" disabled selected>— выберите —</option>
-                        <option>Электровоз</option>
-                        <option>Тепловоз</option>
+                        <option value="" disabled selected>Загрузка…</option>
                     </select>
                 </div>
                 <div class="field">
@@ -99,8 +97,8 @@
                 <h2>О вас</h2>
                 <p class="hint">ФИО и день рождения — мы вас поздравим!</p>
                 <div class="field">
-                    <label for="fio">Фамилия Имя Отчество</label>
-                    <input type="text" id="fio" name="fio" placeholder="Иванов Иван Иванович" required autofocus>
+                    <label for="fullname">Фамилия Имя Отчество</label>
+                    <input type="text" id="fullname" name="fullname" placeholder="Фамилия Имя Отчество" required autofocus>
                 </div>
                 <div class="field">
                     <label for="birthday">День рождения</label>

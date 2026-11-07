@@ -16,11 +16,11 @@ public class ServiceTypeService {
     }
 
 
-    public List<ServiceTypeDto> findAll() {
+    public List<ServiceTypeDto> getAllServiceTypes () {
         return serviceTypeRepository.findAll().stream()
                 .map(s -> new ServiceTypeDto(
-                        s.getId(),
-                        s.getTitle()
+                    s.getId(),
+                    s.getTitle()
                 )).toList();
     }
 }

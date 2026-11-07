@@ -43,8 +43,9 @@ public class User {
     @Column(name = "long_personnel_number")
     private Integer longPersonnelNumber;
 
-    @Column(name = "traction_kind")
-    private String tractionKind;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "traction_kind_id")
+    private TractionKind tractionKind;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_type_id")
