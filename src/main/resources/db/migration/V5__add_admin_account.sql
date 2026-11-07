@@ -25,11 +25,12 @@ CREATE TABLE IF NOT EXISTS users (
     personnel_number INT,
     long_personnel_number INT,
     tractionKind VARCHAR(12),
-    service_type VARCHAR(15),
+    service_type_id BIGINT,
     locomotive_depot_id BIGINT,
 
     FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE,
     FOREIGN KEY (position_id) REFERENCES positions(id) ON DELETE SET NULL,
+    FOREIGN KEY (service_type_id) REFERENCES service_types(id) ON DELETE SET NULL,
     FOREIGN KEY (locomotive_depot_id) REFERENCES locomotive_depots(id) ON DELETE SET NULL
 );
 

@@ -46,8 +46,9 @@ public class User {
     @Column(name = "traction_kind")
     private String tractionKind;
 
-    @Column(name = "service_type")
-    private String serviceType;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "service_type_id")
+    private ServiceType serviceType;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "locomotive_depot_id")

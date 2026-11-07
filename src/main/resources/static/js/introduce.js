@@ -1,6 +1,6 @@
 const introduceCurrentMessage = document.getElementById('introduceCurrentMessage');
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", async function() {
 
     const progress = document.getElementById('progress');
     const stage = document.getElementById('stage');
@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const position = document.getElementById('position');
     const tabnum = document.getElementById('tabnum');
     const tabnum_long = document.getElementById('tabnum_long');
+    const traffic = document.getElementById('traffic');
 
 //region .:: Progress bar
     for (let i = 0; i < forms.length; i++) {
@@ -36,13 +37,13 @@ document.addEventListener("DOMContentLoaded", function() {
 //endregion
 
 //region .:: Events chain
-    loadRailways(railway);
+    await loadRailways(railway);
     railway.onchange = async function(e) {
         const railwayId = e.target.value;
         if (!railwayId) return;
         await loadLocomotiveDepots(railwayId);
     }
-    loadPositions(position);
+    await loadPositions(position);
     position.onchange = function() {
         tabnum.focus();
     }
@@ -58,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
             goTo(current + 1);
         }
     }
+    await loadServiceTypes(traffic);
 //endregion
 
 
@@ -212,6 +214,38 @@ async function loadPositions(select) {
             });
     } catch (err) {
         displayMessage(introduceCurrentMessage, 'Не удалось загрузить список должностей', false);
+        select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
+        select.disabled = true;
+    }
+}
+
+async function loadServiceTypes(select) {
+
+    try {
+        const result = await fetch(URI + "/service-types", {
+            headers: { 'Accept': 'application/json' },
+            credentials: 'include'
+        });
+
+        if (!result.ok) {
+            displayMessage(introduceCurrentMessage, 'Ошибка загрузки данных', false);
+            throw new Error(`HTTP ${result.status}`);
+        }
+
+        const serviceTypes = await result.json();
+
+        select.replaceChildren();
+        const placeholder = createDefaultOption('— выберите вид движения —');
+        select.appendChild(placeholder);
+
+        serviceTypes
+            .slice()
+            .forEach(r => {
+                const opt = createOption(r.id, r.title);
+                select.appendChild(opt);
+            });
+    } catch (err) {
+        displayMessage(introduceCurrentMessage, 'Не удалось загрузить виды движения', false);
         select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
         select.disabled = true;
     }

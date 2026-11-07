@@ -28,7 +28,7 @@ public class UserService {
         user.setLongPersonnelNumber(req.longPersonnelNumber());
         user.setNumberOfColumn(req.numberOfColumn());
         user.setTractionKind(req.tractionKind());
-        user.setServiceType(req.serviceType());
+        //user.setServiceType(req.serviceTypeId());
         user.setFullName(req.fullName());
         user.setDateOfBirth(req.birthDate());
         user.setNickname(req.nickname());

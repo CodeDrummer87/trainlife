@@ -21,7 +21,6 @@ public class PositionService {
                 .map(p -> new PositionDto(
                         p.getId(),
                         p.getTitle()
-                ))
-                .toList();
+                )).toList();
     }
 }
