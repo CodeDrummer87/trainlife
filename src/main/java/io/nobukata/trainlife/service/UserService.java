@@ -23,7 +23,7 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("Не найден пользователь: " + username));
 
         user.setDepotId(req.locomotiveDepotId());
-        user.setPosition(req.position());
+        //user.setPosition(req.position());
         user.setPersonnelNumber(req.personnelNumber());
         user.setLongPersonnelNumber(req.longPersonnelNumber());
         user.setNumberOfColumn(req.numberOfColumn());

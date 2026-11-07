@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", function() {
     const saveBtn = document.getElementById('saveBtn');
 
     const railway = document.getElementById('railway');
+    const position = document.getElementById('position');
+    const tabnum = document.getElementById('tabnum');
+    const tabnum_long = document.getElementById('tabnum_long');
 
 //region .:: Progress bar
     for (let i = 0; i < forms.length; i++) {
@@ -32,12 +35,31 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 //endregion
 
-    loadRailways();
+//region .:: Events chain
+    loadRailways(railway);
     railway.onchange = async function(e) {
         const railwayId = e.target.value;
         if (!railwayId) return;
         await loadLocomotiveDepots(railwayId);
     }
+    loadPositions(position);
+    position.onchange = function() {
+        tabnum.focus();
+    }
+    tabnum.onkeydown = function(e) {
+        checkAvailableInput(this, 6);
+        if (e.key === 'Enter' || e.key === 'Tab') {
+            tabnum_long.focus();
+        }
+    }
+    tabnum_long.onkeydown = function (e) {
+        checkAvailableInput(this, 8);
+        if (e.key === 'Enter' || e.key === 'Tab') {
+            goTo(current + 1);
+        }
+    }
+//endregion
+
 
     function checkComplete() {
         let allFilled = true;
@@ -94,8 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
     stage.addEventListener('change', checkComplete);
 });
 
-async function loadRailways() {
-    const select = document.getElementById('railway');
+async function loadRailways(select) {
 
     try {
         const result = await fetch(URI + "/railways", {
@@ -111,7 +132,7 @@ async function loadRailways() {
         const railways = await result.json();
 
         select.replaceChildren();
-        const placeholder = createDefaultOption('— выберите —');
+        const placeholder = createDefaultOption('— выберите железную дорогу—');
         select.appendChild(placeholder);
 
         railways
@@ -144,7 +165,7 @@ async function loadLocomotiveDepots(railwayId) {
         const depots = await result.json();
 
         select.replaceChildren();
-        const placeholder = createDefaultOption('— выберите —');
+        const placeholder = createDefaultOption('— выберите локомотивное депо —');
         select.appendChild(placeholder);
 
         if (depots.length === 0) {
@@ -159,6 +180,38 @@ async function loadLocomotiveDepots(railwayId) {
             });
     } catch (err) {
         displayMessage(introduceCurrentMessage, 'Не удалось загрузить список депо для данной дороги', false);
+        select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
+        select.disabled = true;
+    }
+}
+
+async function loadPositions(select) {
+
+    try {
+        const result = await fetch(URI + "/positions", {
+            headers: { 'Accept': 'application/json' },
+            credentials: 'include'
+        });
+
+        if (!result.ok) {
+            displayMessage(introduceCurrentMessage, 'Ошибка загрузки данных', false);
+            throw new Error(`HTTP ${result.status}`);
+        }
+
+        const positions = await result.json();
+
+        select.replaceChildren();
+        const placeholder = createDefaultOption('— выберите должность —');
+        select.appendChild(placeholder);
+
+        positions
+            .slice()
+            .forEach(r => {
+                const opt = createOption(r.id, r.title);
+                select.appendChild(opt);
+            });
+    } catch (err) {
+        displayMessage(introduceCurrentMessage, 'Не удалось загрузить список должностей', false);
         select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
         select.disabled = true;
     }

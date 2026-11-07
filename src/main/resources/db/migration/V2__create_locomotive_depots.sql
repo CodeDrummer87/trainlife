@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS locomotive_depots(
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     railway_id BIGINT NOT NULL,
     short_title VARCHAR(30) NOT NULL,
     full_title VARCHAR(100) NOT NULL UNIQUE,

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS public.accounts (
+CREATE TABLE IF NOT EXISTS accounts (
     id BIGSERIAL PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL,
@@ -14,13 +14,13 @@ VALUES (
 )
 ON CONFLICT (username) DO NOTHING;
 
-CREATE TABLE IF NOT EXISTS public.users (
+CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY,
     account_id BIGINT NOT NULL UNIQUE,
     nickname VARCHAR(20) UNIQUE,
     full_name VARCHAR(100),
     date_of_birth DATE,
-    position VARCHAR(26),
+    position_id BIGINT,
     number_of_column INT,
     personnel_number INT,
     long_personnel_number INT,
@@ -28,10 +28,11 @@ CREATE TABLE IF NOT EXISTS public.users (
     service_type VARCHAR(15),
     locomotive_depot_id BIGINT,
 
-    FOREIGN KEY (account_id) REFERENCES public.accounts(id) ON DELETE CASCADE,
-    FOREIGN KEY (locomotive_depot_id) REFERENCES public.locomotive_depots(id) ON DELETE SET NULL
+    FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE,
+    FOREIGN KEY (position_id) REFERENCES positions(id) ON DELETE SET NULL,
+    FOREIGN KEY (locomotive_depot_id) REFERENCES locomotive_depots(id) ON DELETE SET NULL
 );
 
-INSERT INTO public.users (account_id)
-SELECT id FROM public.accounts WHERE username = 'admin'
+INSERT INTO users (account_id)
+SELECT id FROM accounts WHERE username = 'admin'
 ON CONFLICT (account_id) DO NOTHING;

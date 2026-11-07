@@ -25,3 +25,13 @@ function displayMessage(paragraph, message, success) {
         paragraph.innerText = '\u00A0';
     }, 2500);
 }
+
+function checkAvailableInput(input, digits) {
+    input.addEventListener('keydown', function (event) {
+        const allowedInput = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'Backspace'];
+        if (!allowedInput.includes(event.key) || input.value.length > digits - 1) {
+            if (event.key !== 'Backspace')
+                event.preventDefault();
+        }
+    });
+}

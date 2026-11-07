@@ -47,8 +47,10 @@
                 <h2>Служебные данные</h2>
                 <p class="hint">Должность и табельные номера</p>
                 <div class="field">
-                    <label for="position">Должность</label>
-                    <input type="text" id="position" name="position" placeholder="Например, машинист" required>
+                    <label for="position">Железная дорога</label>
+                    <select id="position" name="position" required>
+                        <option value="" disabled selected>Загрузка…</option>
+                    </select>
                 </div>
                 <div class="field">
                     <label for="tabnum">Табельный номер</label>
@@ -56,7 +58,7 @@
                 </div>
                 <div class="field">
                     <label for="tabnum_long">Длинный табельный номер</label>
-                    <input type="text" id="tabnum_long" name="tabnum_long" placeholder="Полный табельный номер" required>
+                    <input type="text" id="tabnum_long" name="tabnum_long" placeholder="Табельный номер для ЕКАСУТР" required>
                 </div>
                 <div class="actions">
                     <button type="button" class="btn-back">← Назад</button>

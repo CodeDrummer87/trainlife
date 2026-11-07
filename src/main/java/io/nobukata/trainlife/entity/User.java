@@ -30,7 +30,9 @@ public class User {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    private String position;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "position_id")
+    private Position position;
 
     @Column(name = "number_of_column")
     private Integer numberOfColumn;

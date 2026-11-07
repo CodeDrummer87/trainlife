@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS railways (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     full_title VARCHAR(50) NOT NULL,
     abbreviation VARCHAR(10) NOT NULL,
     code CHAR(3) NOT NULL UNIQUE
