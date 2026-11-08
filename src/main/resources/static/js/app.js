@@ -33,5 +33,5 @@ function checkAvailableInput(input, digits) {
             if (event.key !== 'Backspace')
                 event.preventDefault();
         }
-    });
+    }, {once: true});
 }

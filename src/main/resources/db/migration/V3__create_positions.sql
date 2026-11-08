@@ -1,10 +1,10 @@
-CREATE TABLE IF NOT EXISTS positions(
+CREATE TABLE IF NOT EXISTS public.positions (
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(26) NOT NULL,
     abbreviate VARCHAR(11) NOT NULL
 );
 
-INSERT INTO positions (title,  abbreviate)
+INSERT INTO public.positions (title,  abbreviate)
 VALUES
     ('Машинист', 'ТЧМ'),
     ('Помощник машиниста', 'ТЧПМ'),

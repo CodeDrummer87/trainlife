@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     const traction = document.getElementById('traction');
     const column = document.getElementById('column');
     const fullname = document.getElementById('fullname');
+    const birthday = document.getElementById('birthday');
 
 //region .:: Progress bar
     for (let i = 0; i < forms.length; i++) {
@@ -72,6 +73,16 @@ document.addEventListener("DOMContentLoaded", async function() {
         if (e.key === 'Enter' || e.key === 'Tab') {
             goTo(current + 1);
             fullname.focus();
+        }
+    }
+    fullname.onkeydown = function(e) {
+        if (e.key === ' ' && fullname.value.slice(-1) === ' ') {
+            e.preventDefault();
+        }
+        if(!(/^(?:[А-Яа-яЁё\s'-]|Backspace|ArrowRight|ArrowLeft|Tab|Enter)$/).test(e.key)) {
+            e.preventDefault();
+            if (e.key === 'Enter' || e.key === 'Tab')
+                birthday.focus();
         }
     }
 //endregion
