@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     const column = document.getElementById('column');
     const fullname = document.getElementById('fullname');
     const birthday = document.getElementById('birthday');
+    const nickname = document.getElementById('nickname');
 
 //region .:: Progress bar
     for (let i = 0; i < forms.length; i++) {
@@ -83,6 +84,12 @@ document.addEventListener("DOMContentLoaded", async function() {
             e.preventDefault();
             if (e.key === 'Enter' || e.key === 'Tab')
                 birthday.focus();
+        }
+    }
+
+    nickname.onkeydown = function(e) {
+        if (!(/^[A-Za-zА-Яа-яЁё]{1,10}$/).test(e.key)) {
+            e.preventDefault();
         }
     }
 //endregion
