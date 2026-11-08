@@ -30,7 +30,7 @@ public class User {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id")
     private Position position;
 
@@ -43,20 +43,15 @@ public class User {
     @Column(name = "long_personnel_number")
     private Integer longPersonnelNumber;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "traction_kind_id")
     private TractionKind tractionKind;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_type_id")
     private ServiceType serviceType;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "locomotive_depot_id")
     private LocomotiveDepot locomotiveDepot;
-
-
-    public void setDepotId(Long depotId) {
-        this.locomotiveDepot.setId(depotId);
-    }
 }

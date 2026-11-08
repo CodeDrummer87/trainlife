@@ -1,27 +1,21 @@
 package io.nobukata.trainlife.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
 public record IntroduceRequest(
 
-        @NotBlank Long locomotiveDepotId,
-        @NotBlank Long positionId,
-        @NotBlank(message = "Не указан короткий табельный номер")
-        @Pattern(regexp = "\\d{3,6}", message = "Табельный номер должен содержать от 3 до 10 цифр")
-        Integer personnelNumber,
-        @NotBlank(message = "Не указан единый для ЕКАСУТР табельный номер")
-        @Pattern(regexp = "\\d{8}", message = "Табельный номер должен содержать 8 цифр")
-        Integer longPersonnelNumber,
-        @NotBlank(message = "Не указан номер колонны")
-        Integer numberOfColumn,
-        @NotBlank Long serviceTypeId,
-        @NotBlank String tractionKind,
+        @NotNull Long depotId,
+        @NotNull Long positionId,
+        @NotNull Integer personnelNumber,
+        @NotNull Integer longPersonnelNumber,
+        @NotNull Integer numberOfColumn,
+        @NotNull Long serviceTypeId,
+        @NotNull Long tractionKind,
         @NotBlank String fullName,
-        @NotBlank LocalDate birthDate,
+        @NotNull LocalDate dateOfBirth,
         @NotBlank(message = "Придумайте себе псевдоним")
         String nickname
-        ) {
-}
+) {}

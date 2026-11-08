@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         tabnum.focus();
     }
     tabnum.onkeydown = function(e) {
-        checkAvailableInput(this, 6);
+        checkAvailableInput(this, 5);
         if (e.key === 'Enter' || e.key === 'Tab') {
             tabnum_long.focus();
         }
@@ -86,11 +86,28 @@ document.addEventListener("DOMContentLoaded", async function() {
                 birthday.focus();
         }
     }
-
     nickname.onkeydown = function(e) {
         if (!(/^[A-Za-zА-Яа-яЁё]{1,10}$/).test(e.key)) {
             e.preventDefault();
         }
+    }
+    saveBtn.onclick = function(e) {
+        e.preventDefault();
+
+        const payload = {
+            depotId: document.getElementById('depot').value,
+            positionId: position.value,
+            personnelNumber: tabnum.value,
+            longPersonnelNumber: tabnum_long.value,
+            numberOfColumn: column.value,
+            serviceTypeId: traffic.value,
+            tractionKind: traction.value,
+            fullName: fullname.value,
+            dateOfBirth: birthday.value,
+            nickname: nickname.value
+        }
+
+        submitIntroduce(payload);
     }
 //endregion
 
@@ -313,4 +330,24 @@ async function loadTractionKinds(select) {
         select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
         select.disabled = true;
     }
+}
+
+async function submitIntroduce(introduceData) {
+    const res = await fetch(URI + '/users/introduce', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        credentials: 'include',
+        body: JSON.stringify(introduceData)
+    });
+    if (res.ok) {
+        const data = await res.json();
+        displayMessage(introduceCurrentMessage, data.message, true);
+        setTimeout(() => {
+            window.location.href = '/account';
+        }, 3000);
+        return true;
+    }
+    const err = await res.json().catch(() => ({}));
+    console.log(err.error);
+    return false;
 }
