@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Знакомство</title>
+    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/introduce.css">
+</head>
+<body>
+    <div class="container">
+        <div class="progress" id="progress"></div>
+        <div class="stage" id="stage">
+
+            <form class="form-card active" data-step="1" autocomplete="off">
+                <h2>Железная дорога</h2>
+                <p class="hint">Выберите дорогу, на которой вы работаете</p>
+                <div class="field">
+                    <label for="railway">Железная дорога</label>
+                    <select id="railway" name="railway" required>
+                        <option value="" disabled selected>Загрузка…</option>
+                    </select>
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn-next">Далее →</button>
+                </div>
+            </form>
+
+
+            <form class="form-card" data-step="2" autocomplete="off">
+                <h2>Локомотивное депо</h2>
+                <p class="hint">Укажите депо, к которому вы приписаны</p>
+                <div class="field">
+                    <label for="depot">Локомотивное депо</label>
+                    <select id="depot" name="depot" required>
+                        <option value="" disabled selected>Загрузка…</option>
+                    </select>
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn-back">← Назад</button>
+                    <button type="button" class="btn-next">Далее →</button>
+                </div>
+            </form>
+
+
+            <form class="form-card" data-step="3" autocomplete="off">
+                <h2>Служебные данные</h2>
+                <p class="hint">Должность и табельные номера</p>
+                <div class="field">
+                    <label for="position">Должность</label>
+                    <select id="position" name="position" required>
+                        <option value="" disabled selected>Загрузка…</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="tabnum">Табельный номер</label>
+                    <input type="text" id="tabnum" name="tabnum" placeholder="Короткий табельный" required>
+                </div>
+                <div class="field">
+                    <label for="tabnum_long">Табельный номер ЕКАСУТР</label>
+                    <input type="text" id="tabnum_long" name="tabnum_long" placeholder="Табельный номер ЕКАСУТР" required>
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn-back">← Назад</button>
+                    <button type="button" class="btn-next">Далее →</button>
+                </div>
+            </form>
+
+
+            <form class="form-card" data-step="4" autocomplete="off">
+                <h2>Профиль работы</h2>
+                <p class="hint">Вид движения, вид тяги и колонна</p>
+                <div class="field">
+                    <label for="traffic">Вид движения</label>
+                    <select id="traffic" name="traffic" required>
+                        <option value="" disabled selected>Загрузка…</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="traction">Вид тяги</label>
+                    <select id="traction" name="traction" required>
+                        <option value="" disabled selected>Загрузка…</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="column">Номер колонны</label>
+                    <input type="text" id="column" name="column" placeholder="Например, 3" required>
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn-back">← Назад</button>
+                    <button type="button" class="btn-next">Далее →</button>
+                </div>
+            </form>
+
+
+            <form class="form-card" data-step="5" autocomplete="off">
+                <h2>О вас</h2>
+                <p class="hint">ФИО и день рождения — мы вас поздравим!</p>
+                <div class="field">
+                    <label for="fullname">Фамилия Имя Отчество</label>
+                    <input type="text" id="fullname" name="fullname" placeholder="Фамилия Имя Отчество" required autofocus>
+                </div>
+                <div class="field">
+                    <label for="birthday">День рождения</label>
+                    <input type="date" id="birthday" name="birthday" required>
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn-back">← Назад</button>
+                    <button type="button" class="btn-next">Далее →</button>
+                </div>
+            </form>
+
+
+            <form class="form-card" data-step="6" autocomplete="off">
+                <h2>Почти готово</h2>
+                <p class="hint">Придумайте псевдоним для сайта</p>
+                <div class="field">
+                    <label for="nickname">Псевдоним</label>
+                    <input type="text" id="nickname" name="nickname" placeholder="Ваш псевдоним" required>
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn-back">← Назад</button>
+                    <button type="button" class="btn-save" id="saveBtn" disabled>Сохранить</button>
+                </div>
+            </form>
+            <p id="introduceCurrentMessage" class="toast">&nbsp;</p>
+        </div>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/introduce.js"></script>
+</body>
+</html>

@@ -50,6 +50,7 @@ public class SecurityConfig {
                                 "/admin",
                                 "/html/admin.html").hasRole("ADMIN")
                         .requestMatchers(
+                                "/introduce",
                                 "/account",
                                 "/html/account.html").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()

@@ -22,30 +22,36 @@ public class User {
     @JoinColumn(name = "account_id", nullable = false, unique = true)
     private Account account;
 
-    @JoinColumn(name = "full_name")
+    private String nickname;
+
+    @Column(name = "full_name")
     private String fullName;
 
-    @JoinColumn(name = "birth_date")
+    @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    private String position;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "position_id")
+    private Position position;
 
-    @JoinColumn(name = "column_number")
+    @Column(name = "number_of_column")
     private Integer numberOfColumn;
 
-    @JoinColumn(name = "personnel_number")
+    @Column(name = "personnel_number")
     private Integer personnelNumber;
 
-    @JoinColumn(name = "long_personnel_number")
-    private Integer long_personnelNumber;
+    @Column(name = "long_personnel_number")
+    private Integer longPersonnelNumber;
 
-    @JoinColumn(name = "traction_kind")
-    private String tractionKind;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "traction_kind_id")
+    private TractionKind tractionKind;
 
-    @JoinColumn(name = "service_type")
-    private String serviceType;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "service_type_id")
+    private ServiceType serviceType;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "locomotive_depot_id")
     private LocomotiveDepot locomotiveDepot;
 }

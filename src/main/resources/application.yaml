@@ -18,8 +18,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update  # обновление схемы БД при запуске проекта (только для разработки)
-    show-sql: true      # выводит SQL-запросы при их выполнении в консоль
+      ddl-auto: validate
     properties:
       hibernate:
         default_schema: public

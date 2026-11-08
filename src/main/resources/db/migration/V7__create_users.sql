@@ -1,0 +1,24 @@
+CREATE TABLE IF NOT EXISTS users (
+    id BIGSERIAL PRIMARY KEY,
+    account_id BIGINT NOT NULL UNIQUE,
+    nickname VARCHAR(20) UNIQUE,
+    full_name VARCHAR(100),
+    date_of_birth DATE,
+    position_id BIGINT,
+    number_of_column INT,
+    personnel_number INT,
+    long_personnel_number INT,
+    traction_kind_id BIGINT,
+    service_type_id BIGINT,
+    locomotive_depot_id BIGINT,
+
+    FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE,
+    FOREIGN KEY (position_id) REFERENCES positions(id) ON DELETE SET NULL,
+    FOREIGN KEY (traction_kind_id) REFERENCES traction_kinds(id) ON DELETE SET NULL,
+    FOREIGN KEY (service_type_id) REFERENCES service_types(id) ON DELETE SET NULL,
+    FOREIGN KEY (locomotive_depot_id) REFERENCES locomotive_depots(id) ON DELETE SET NULL
+);
+
+INSERT INTO users (account_id)
+SELECT id FROM accounts WHERE username = 'admin'
+ON CONFLICT (account_id) DO NOTHING;
