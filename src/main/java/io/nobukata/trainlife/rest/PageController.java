@@ -1,5 +1,6 @@
 package io.nobukata.trainlife.rest;
 
+import io.nobukata.trainlife.security.entity.Account;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -22,12 +23,21 @@ public class PageController {
     }
 
     @GetMapping("/register")
-    public String register() {
+    public String register(Authentication auth) {
+        Account currentAccount = (Account) auth.getPrincipal();
+        if (currentAccount.getWasIntroduced()) {
+            return "redirect:/account";
+        }
         return "forward:/html/register.html";
     }
 
     @GetMapping("/introduce")
-    public String introduce() {
+    public String introduce(Authentication auth) {
+        Account currentAccount = (Account) auth.getPrincipal();
+        if (currentAccount.getWasIntroduced()) {
+            return "redirect:/account";
+        }
+
         return "forward:/html/introduce.html";
     }
 

@@ -1,10 +1,11 @@
 package io.nobukata.trainlife.security.rest;
 
+import io.nobukata.trainlife.security.dto.LoginRequest;
+import io.nobukata.trainlife.security.dto.RegisterRequest;
 import io.nobukata.trainlife.security.entity.Account;
 import io.nobukata.trainlife.security.service.AccountService;
 import io.nobukata.trainlife.security.service.JwtService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -113,7 +114,4 @@ public class AuthController {
                 .sameSite("Lax")
                 .build();
     }
-
-    public record LoginRequest(@NotBlank String username, @NotBlank String password) {}
-    public record RegisterRequest(@NotBlank String username, @NotBlank String password) {}
 }
