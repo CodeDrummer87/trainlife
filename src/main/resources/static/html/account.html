@@ -5,13 +5,39 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Поездная жизнь: Личный кабинет</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Личный кабинет</title>
+    <link rel="stylesheet" href="../css/app.css">
 </head>
+
 <body>
-    <h1>Личный кабинет</h1>
-    <p>User: <span id="username"></span></p>
-    <button id="logout">Logout</button>
+    <div class="container">
+        <header>
+            <p><span id="logout">выйти</span></p>
+        </header>
+        <div class="inner-container">
+            <div class="inner-header">
+                <h1>- Поездная жизнь -</h1>
+                <hr>
+                <p id="underline_quote">За горизонт тебя ведёт Магистраль...</p>
+            </div>
+            <nav>
+                <h3>Поездки</h3>
+                <p>Новая</p>
+                <p>Список</p>
+                <p>Статистика</p>
+            </nav>
+            <article>
+
+            </article>
+        </div>
+        <footer>
+            <p id="copyright"></p>
+            <p id="currentMessage">&nbsp;</p>
+            <p>Андрей Бодров &#9733 code.drummer87@gmail.com</p>
+        </footer>
+    </div>
+
+
     <script src="/js/auth.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', loadProfile);

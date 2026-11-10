@@ -23,7 +23,7 @@ function displayMessage(paragraph, message, success) {
     paragraph.innerText = message;
     setTimeout(function() {
         paragraph.innerText = '\u00A0';
-    }, 2500);
+    }, 3000);
 }
 
 function checkAvailableInput(input, digits) {

@@ -24,17 +24,20 @@ public class PageController {
 
     @GetMapping("/register")
     public String register(Authentication auth) {
-        Account currentAccount = (Account) auth.getPrincipal();
-        if (currentAccount.getWasIntroduced()) {
+        if (auth == null || !(auth.getPrincipal() instanceof Account currentAccount)) {
+            return "forward:/html/register.html";
+        }
+
+        if (Boolean.TRUE.equals(currentAccount.getWasIntroduced())) {
             return "redirect:/account";
         }
+
         return "forward:/html/register.html";
     }
 
     @GetMapping("/introduce")
     public String introduce(Authentication auth) {
-        Account currentAccount = (Account) auth.getPrincipal();
-        if (currentAccount.getWasIntroduced()) {
+        if (auth.getPrincipal() instanceof Account currentAccount && currentAccount.getWasIntroduced()) {
             return "redirect:/account";
         }
 
@@ -51,10 +54,12 @@ public class PageController {
         return "forward:/html/admin.html";
     }
 
-    private boolean isAuthenticated(Authentication authentication) {
-        return authentication != null
-                && authentication.isAuthenticated()
-                && !(authentication instanceof AnonymousAuthenticationToken);
+    @GetMapping("/new-trip")
+    public String newTrip() {
+        return "forward:/html/new-trip.html";
+    }
+
+    private boolean isAuthenticated(Authentication auth) {
+        return auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
     }
 }
-

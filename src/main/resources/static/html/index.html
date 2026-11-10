@@ -6,14 +6,42 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Поездная жизнь</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/app.css">
 </head>
-<body>
-    <p class="actions">
-        <a class="btn" href="/login">Login</a>
-        <a class="btn" href="/register">Register</a>
-    </p>
 
-    <h1>Поездная жизнь</h1>
+<body>
+    <div class="container">
+        <header>
+            <p><span id="login">войти</span> &#9733 <span id="register">регистрация</span></p>
+        </header>
+        <div class="inner-container">
+            <div class="inner-header">
+                <h1>- Поездная жизнь -</h1>
+                <hr>
+                <p id="underline_quote">За горизонт тебя ведёт Магистраль...</p>
+            </div>
+            <nav>
+                <p>Здесь будет доступно меню для неавторизованных пользователей</p>
+            </nav>
+            <article>
+                <p>Общий контент. Возможно парсинг новостей с жд порталов. Актуальные инструкции. Расчёты закрепления, электроэнергии и пр.</p>
+            </article>
+        </div>
+        <footer>
+            <p id="copyright"></p>
+            <p id="currentMessage">&nbsp;</p>
+            <p>Андрей Бодров &#9733 code.drummer87@gmail.com</p>
+        </footer>
+
+        <script>
+            document.getElementById('login').onclick = () => {
+                window.location.href = "/login";
+            }
+
+            document.getElementById('register').onclick = () => {
+                window.location.href = "/register";
+            }
+        </script>
+    </div>
 </body>
 </html>

@@ -44,7 +44,7 @@ public class SecurityConfig {
                                 "/html/login.html",
                                 "/html/register.html",
                                 "/html/index.html").permitAll()
-                        .requestMatchers("/css/**", "/js/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/fonts/**", "/images/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(
                                 "/admin",
@@ -52,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/introduce",
                                 "/account",
+                                "/new-trip",
                                 "/html/account.html").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )

@@ -1,4 +1,4 @@
-async function login(username, password) {
+async function login(username, password, currentMessage) {
     const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -14,11 +14,11 @@ async function login(username, password) {
         return true;
     }
     const err = await res.json().catch(() => ({}));
-    document.getElementById('error').textContent = err.error || 'Login failed';
+    displayMessage(currentMessage, err.error, false);
     return false;
 }
 
-async function register(username, password) {
+async function register(username, password, currentMessage) {
     const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -27,7 +27,7 @@ async function register(username, password) {
     });
     if (res.ok) return true;
     const err = await res.json().catch(() => ({}));
-    document.getElementById('error').textContent = err.error || 'Register failed';
+    displayMessage(currentMessage, err.error, false);
     return false;
 }
 
