@@ -45,7 +45,10 @@ public class PageController {
     }
 
     @GetMapping("/account")
-    public String account() {
+    public String account(Authentication auth) {
+        if (auth.getPrincipal() instanceof Account currentAccount && !currentAccount.getWasIntroduced()) {
+            return "redirect:/introduce";
+        }
         return "forward:/html/account.html";
     }
 

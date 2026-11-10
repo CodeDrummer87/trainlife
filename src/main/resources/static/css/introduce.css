@@ -1,30 +1,12 @@
 :root {
     --primary: #39ed06;
-    /*--primary-hover: #1f5bd0;*/
-    /*--bg: #f4f6fb;*/
     --card-bg: #062d3e;
-    /*--text: #1f2733;*/
-    --muted: #6b7686;
+    --muted: #12729e;
     --border: burlywood;
     --shadow: 0 10px 30px rgba(31, 39, 51, 0.08);
-/*    --error: #d64545;*/
-/*    --success: #3ab313;*/
 }
 
-/** { box-sizing: border-box; }*/
-
-/*body {*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    justify-content: center;*/
-/*    padding: 24px;*/
-/*}*/
-
 article {
-    /*display: flex;*/
-    /*align-items: center;*/
-    /*justify-content: center;*/
-    /*padding: 24px;*/
     width: 100%;
     position: relative;
 }
@@ -32,9 +14,8 @@ article {
 .progress {
     display: flex;
     gap: 8px;
-    /*margin-top: -80px;*/
-    /*margin-bottom: 24px;*/
     justify-content: center;
+    margin-bottom: 5px;
 }
 .progress .dot {
     width: 10px;
@@ -118,4 +99,11 @@ label {
     text-transform: uppercase;
     letter-spacing: 0.04em;
     margin-bottom: 6px;
+}
+
+.btn-save:disabled {
+    background: #072d3e;
+    box-shadow: none;
+    cursor: not-allowed;
+    color: burlywood;
 }
