@@ -5,27 +5,76 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Поездная жизнь: Регистрация</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Регистрация в системе</title>
+    <link rel="stylesheet" href="../css/app.css">
+    <style>
+        .inner-container {
+            grid-template-areas:
+        "H H H"
+        "A A A";
+        }
+
+        form {
+            max-width: 320px;
+            margin: 0 auto;
+            text-align: left;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Register</h1>
-    <form id="register-form">
-        <input type="text" id="username" placeholder="email" autofocus required>
-        <input type="password" id="password" placeholder="password" required>
-        <button type="submit">Register</button>
-    </form>
-    <p id="error" style="color:red"></p>
-    <p><a href="/login">Назад</a></p>
+    <div class="container">
+        <header>
+            <p><span id="index">на главную</span> &#9733 <span id="login">войти</span></p>
+        </header>
+        <div class="inner-container">
+            <div class="inner-header">
+                <h1>- Поездная жизнь -</h1>
+                <hr>
+                <p id="underline_quote">За горизонт тебя ведёт Магистраль...</p>
+            </div>
+            <article>
+                <h3>Регистрация в системе</h3>
+                <form autocomplete="off">
+                    <input type="text" id="username" placeholder="логин" autofocus required>
+                    <input type="password" id="password" placeholder="пароль" required>
+                    <button id='regButton' type="button">Зарегистрироваться</button>
+                </form>
+                <p id="currentMessage">&nbsp;</p>
+            </article>
+        </div>
+        <footer>
+            <p id="copyright"></p>
+            <p>Андрей Бодров &#9733 code.drummer87@gmail.com</p>
+        </footer>
+    </div>
+
+
+    <script src="/js/app.js"></script>
     <script src="/js/auth.js"></script>
     <script>
-        document.getElementById('register-form').addEventListener('submit', async (e) => {
+        document.getElementById('index').onclick = () => {
+            window.location.href = "/";
+        }
+        document.getElementById('login').onclick = () => {
+            window.location.href = "/login";
+        }
+
+        const currentMessage = document.getElementById('currentMessage');
+        document.getElementById('regButton').onclick = async (e) => {
             e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            const ok = await register(username, password);
+
+            if (!username || !password) {
+                const reason = !username ? 'логин' : 'пароль';
+                displayMessage(currentMessage, 'Некорректный ' + reason, false);
+                return;
+            }
+
+            const ok = await register(username, password, currentMessage);
             if (ok) window.location.href = '/login';
-        });
+        };
     </script>
 </body>
 </html>

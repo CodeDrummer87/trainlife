@@ -1,5 +1,6 @@
 package io.nobukata.trainlife.rest;
 
+import io.nobukata.trainlife.security.entity.Account;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -22,17 +23,32 @@ public class PageController {
     }
 
     @GetMapping("/register")
-    public String register() {
+    public String register(Authentication auth) {
+        if (auth == null || !(auth.getPrincipal() instanceof Account currentAccount)) {
+            return "forward:/html/register.html";
+        }
+
+        if (Boolean.TRUE.equals(currentAccount.getWasIntroduced())) {
+            return "redirect:/account";
+        }
+
         return "forward:/html/register.html";
     }
 
     @GetMapping("/introduce")
-    public String introduce() {
+    public String introduce(Authentication auth) {
+        if (auth.getPrincipal() instanceof Account currentAccount && currentAccount.getWasIntroduced()) {
+            return "redirect:/account";
+        }
+
         return "forward:/html/introduce.html";
     }
 
     @GetMapping("/account")
-    public String account() {
+    public String account(Authentication auth) {
+        if (auth.getPrincipal() instanceof Account currentAccount && !currentAccount.getWasIntroduced()) {
+            return "redirect:/introduce";
+        }
         return "forward:/html/account.html";
     }
 
@@ -41,10 +57,12 @@ public class PageController {
         return "forward:/html/admin.html";
     }
 
-    private boolean isAuthenticated(Authentication authentication) {
-        return authentication != null
-                && authentication.isAuthenticated()
-                && !(authentication instanceof AnonymousAuthenticationToken);
+    @GetMapping("/new-trip")
+    public String newTrip() {
+        return "forward:/html/new-trip.html";
+    }
+
+    private boolean isAuthenticated(Authentication auth) {
+        return auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
     }
 }
-

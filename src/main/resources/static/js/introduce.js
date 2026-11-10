@@ -1,4 +1,4 @@
-const introduceCurrentMessage = document.getElementById('introduceCurrentMessage');
+const currentMessage = document.getElementById('currentMessage');
 
 document.addEventListener("DOMContentLoaded", async function() {
 
@@ -53,15 +53,19 @@ document.addEventListener("DOMContentLoaded", async function() {
         tabnum.focus();
     }
     tabnum.onkeydown = function(e) {
-        checkAvailableInput(this, 5);
-        if (e.key === 'Enter' || e.key === 'Tab') {
-            tabnum_long.focus();
+        if(!/^\d$/.test(e.key) || tabnum.value.length > 4) {
+            e.preventDefault();
+            if (e.key === 'Enter' || e.key === 'Tab') {
+                tabnum_long.focus();
+            }
         }
     }
     tabnum_long.onkeydown = function (e) {
-        checkAvailableInput(this, 8);
-        if (e.key === 'Enter' || e.key === 'Tab') {
-            goTo(current + 1);
+        if(!/^\d$/.test(e.key) || tabnum_long.value.length > 7) {
+            e.preventDefault();
+            if (e.key === 'Enter' || e.key === 'Tab') {
+                goTo(current + 1);
+            }
         }
     }
     await loadServiceTypes(traffic);
@@ -69,11 +73,13 @@ document.addEventListener("DOMContentLoaded", async function() {
     traction.onchange = function() {
         column.focus();
     }
-    column.onkeydown = function (e) {
-        checkAvailableInput(this, 2);
-        if (e.key === 'Enter' || e.key === 'Tab') {
-            goTo(current + 1);
-            fullname.focus();
+    column.onkeydown = (e) => {
+        if(!/^\d$/.test(e.key) || column.value.length > 1) {
+            e.preventDefault();
+            if (e.key === 'Enter' || e.key === 'Tab') {
+                goTo(current + 1);
+                fullname.focus();
+            }
         }
     }
     fullname.onkeydown = function(e) {
@@ -341,7 +347,9 @@ async function submitIntroduce(introduceData) {
     });
     if (res.ok) {
         const data = await res.json();
-        displayMessage(introduceCurrentMessage, data.message, true);
+        displayMessage(currentMessage, data.message, true);
+        console.log("Успех");
+        console.log(currentMessage);
         setTimeout(() => {
             window.location.href = '/account';
         }, 3000);
