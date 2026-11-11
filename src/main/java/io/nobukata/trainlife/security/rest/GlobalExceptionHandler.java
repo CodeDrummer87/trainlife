@@ -1,27 +1,37 @@
 package io.nobukata.trainlife.security.rest;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.Instant;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<?> badCredentials(BadCredentialsException e) {
+    public ResponseEntity<?> badCredentials(BadCredentialsException e,  HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("error", "Некорректный логин или пароль"));
+                .body(Map.of("error", "Некорректный логин или пароль",
+                        "timestamp", Instant.now().toString(),
+                        "path", request.getRequestURI()));
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
@@ -33,8 +43,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> illegalArg(IllegalArgumentException e) {
-        log.warn("Неверный запрос: {}", e.getMessage());
-        return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        log.debug("Неверный запрос");
+        return ResponseEntity.badRequest().body(Map.of("error", "некорректный аргумент запроса"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -42,14 +52,27 @@ public class GlobalExceptionHandler {
         String msg = e.getBindingResult().getFieldErrors().stream()
                 .map(f -> f.getField() + ": " + f.getDefaultMessage())
                 .collect(Collectors.joining(", "));
-        log.warn("Невалидные данные: {}", msg);
+        log.debug("Невалидные данные: {}", msg);
         return ResponseEntity.badRequest().body(Map.of("error", msg));
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> unexpected(Exception e) {
-        log.error("Непредвиденная ошибка", e);   // полный стектрейс
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Map.of("error", "Внутренняя ошибка сервера"));
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<?> disabled(DisabledException e) {
+        log.warn("Попытка входа в отключённый аккаунт");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(Map.of("error", "Аккаунт отключён"));
+    }
+
+    @ExceptionHandler(LockedException.class)
+    public ResponseEntity<?> locked(LockedException e) {
+        log.warn("Попытка входа в заблокированный аккаунт");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(Map.of("error", "Аккаунт заблокирован"));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> unreadable(HttpMessageNotReadableException e) {
+        log.debug("Нечитаемое тело запроса: {}", e.getMessage());
+        return ResponseEntity.badRequest().body(Map.of("error", "Некорректный формат запроса"));
     }
 }
