@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -65,13 +66,13 @@ public class AuthController {
                     .header(HttpHeaders.SET_COOKIE, cookie.toString())
                     .body(Map.of(
                             "username", user.getUsername(),
-                            "role", user.getAuthorities().iterator().next().getAuthority(),
+                            "role", Objects.requireNonNull(user.getAuthorities().iterator().next().getAuthority()),
                             "wasIntroduced", account.getWasIntroduced()));
         } catch (BadCredentialsException e) {
-            log.warn("Ошибка входа в систему (неверные учётные данные): {}", req.username());
+            log.debug("Ошибка входа в систему (неверные учётные данные): {}", req.username());
             throw e;   //.:: 401 от GlobalExceptionHandler
         } catch (DisabledException | LockedException e) {
-            log.warn("Ошибка входа в систему ({}): {}", e.getClass().getSimpleName(), req.username());
+            log.debug("Ошибка входа в систему ({}): {}", e.getClass().getSimpleName(), req.username());
             throw e;
         }
     }
