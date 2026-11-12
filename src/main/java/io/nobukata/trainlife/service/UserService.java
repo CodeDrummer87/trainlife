@@ -1,6 +1,7 @@
 package io.nobukata.trainlife.service;
 
 import io.nobukata.trainlife.dto.IntroduceRequest;
+import io.nobukata.trainlife.dto.UserDto;
 import io.nobukata.trainlife.entity.User;
 import io.nobukata.trainlife.repository.*;
 import io.nobukata.trainlife.security.entity.Account;
@@ -50,5 +51,23 @@ public class UserService {
 
         Account account = user.getAccount();
         account.setWasIntroduced(true);
+    }
+
+    @Transactional(readOnly = true)
+    public UserDto getUserWithDetailsByEmail(String username) {
+        User user = userRepository.findWithDetailsByAccountUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(".:: Пользователь не найден: " + username));
+        return new UserDto(
+                user.getNickname(),
+                user.getFullName(),
+                user.getDateOfBirth(),
+                user.getPosition().getAbbreviate(),
+                user.getNumberOfColumn(),
+                user.getPersonnelNumber(),
+                user.getLongPersonnelNumber(),
+                user.getTractionKind().getTitle(),
+                user.getServiceType().getTitle(),
+                user.getLocomotiveDepot().getShortTitle()
+        );
     }
 }

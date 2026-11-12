@@ -1,8 +1,11 @@
 package io.nobukata.trainlife.rest;
 
 import io.nobukata.trainlife.dto.IntroduceRequest;
+import io.nobukata.trainlife.dto.UserDto;
+import io.nobukata.trainlife.security.entity.Account;
 import io.nobukata.trainlife.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -24,4 +27,13 @@ public class UserController {
         userService.introduce(auth.getName(), req);
         return ResponseEntity.ok(Map.of("message", "Данные сохранены. Спасибо!"));
     }
+
+    @GetMapping("/current")
+    public ResponseEntity<UserDto> getUser(Authentication auth) {
+        if (auth == null || !(auth.getPrincipal() instanceof Account)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(userService.getUserWithDetailsByEmail(auth.getName()));
+    }
+
 }

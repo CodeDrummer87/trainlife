@@ -190,3 +190,14 @@ form button:hover {
     background: rgba(31, 116, 136, 0.7);
     box-shadow: 0 0 5px 5px rgba(38, 164, 214, 0.7);
 }
+
+.userData {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    color: #1ddc1d;
+    position: relative;
+    top: -110px;
+    font-size: 0.9rem;
+    padding-left: 30px;
+}

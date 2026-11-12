@@ -108,9 +108,9 @@ document.addEventListener("DOMContentLoaded", async function() {
             numberOfColumn: column.value,
             serviceTypeId: traffic.value,
             tractionKind: traction.value,
-            fullName: fullname.value,
+            fullName: fullname.value.trim(),
             dateOfBirth: birthday.value,
-            nickname: nickname.value
+            nickname: nickname.value.trim()
         }
 
         submitIntroduce(payload);

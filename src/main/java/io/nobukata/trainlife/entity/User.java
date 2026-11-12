@@ -15,7 +15,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
     @OneToOne(fetch = FetchType.LAZY,
             optional = false)   //.:: декларация уровня JPA => User не может сущестовать без Account
