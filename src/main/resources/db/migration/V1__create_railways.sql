@@ -2,7 +2,8 @@ CREATE TABLE IF NOT EXISTS railways (
     id BIGSERIAL PRIMARY KEY,
     full_title VARCHAR(50) NOT NULL,
     abbreviation VARCHAR(10) NOT NULL,
-    code VARCHAR(3) NOT NULL UNIQUE
+    code VARCHAR(3) NOT NULL UNIQUE,
+    is_active BOOLEAN NOT NULL DEFAULT true
 );
 
 INSERT INTO railways (full_title, abbreviation, code)
@@ -12,7 +13,7 @@ VALUES
     ('Дальневосточная железная дорога', 'ДВостЖД', '096'),
     ('Забайкальская железная дорога', 'ЗабЖД', '094'),
     ('Западно-Сибирская железная дорога', 'ЗСЖД', '083'),
-    ('Калининградская железная дорога', 'КЖД', '010'),
+    ('Калининградская железная дорога', 'КлнгЖД', '010'),
     ('Красноярская железная дорога', 'КрасЖД', '088'),
     ('Куйбышевская железная дорога', 'КбшЖД', '063'),
     ('Московская железная дорога', 'МЖД', '017'),

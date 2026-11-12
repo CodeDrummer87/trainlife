@@ -20,6 +20,6 @@ public class LocomotiveDepotController {
 
     @GetMapping("/by-railway/{id}")
     public ResponseEntity<List<LocomotiveDepotAbbreviateDto>> findAllByRailwayId(@PathVariable Long id) {
-        return ResponseEntity.ok(locomotiveDepotService.getAllDepotsByRailwayId(id));
+        return ResponseEntity.ok(locomotiveDepotService.getAllDepotsByRailwayIdAndIsActiveTrue(id));
     }
 }

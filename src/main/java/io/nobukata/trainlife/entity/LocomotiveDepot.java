@@ -28,4 +28,6 @@ public class LocomotiveDepot {
     private String fullTitle;
     private String address;
     private String code;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive;
 }

@@ -1,7 +1,6 @@
 package io.nobukata.trainlife.rest;
 
 import io.nobukata.trainlife.dto.RailwayDto;
-import io.nobukata.trainlife.entity.Railway;
 import io.nobukata.trainlife.service.RailwayService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +22,6 @@ public class RailwayController {
 
     @GetMapping
     public ResponseEntity<List<RailwayDto>> getAllRailways() {
-        return ResponseEntity.ok(railwayService.getAllRailways());
+        return ResponseEntity.ok(railwayService.getAllRailwaysByIsActiveTrue());
     }
 }

@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface LocomotiveDepotRepository extends JpaRepository<LocomotiveDepot, Long> {
 
-    List<LocomotiveDepot> findByRailwayId(Long id);
+    List<LocomotiveDepot> findByRailwayIdAndIsActiveTrue(Long id);
 }
