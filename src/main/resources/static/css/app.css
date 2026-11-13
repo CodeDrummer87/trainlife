@@ -192,6 +192,7 @@ form button:hover {
 }
 /*.:: R E M I N D E R */
 .reminder {
+    cursor: pointer;
     display: block;
     margin: 0;
     padding: 0;

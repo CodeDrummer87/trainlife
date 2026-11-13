@@ -16,7 +16,6 @@ async function getCurrentUser() {
             credentials: 'include'
         });
 
-        // защита от редиректа на HTML (истёкший токен → EntryPoint → /login)
         const contentType = result.headers.get('Content-Type') || '';
         if (!contentType.includes('application/json')) {
             window.location.href = '/login';

@@ -36,7 +36,6 @@
                 <h3>Поездки</h3>
                 <p>Новая</p>
                 <p>Список</p>
-                <p>Статистика</p>
             </nav>
             <article>
 
@@ -56,12 +55,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', loadProfile);
         const drawer = document.getElementById('reminder');
-        const tab = document.getElementById('reminderTab');
 
-        tab.addEventListener('click', (e) => {
+        document.getElementById('reminder').onclick = (e) => {
             e.stopPropagation();
             drawer.classList.toggle('open');
-        });
+        }
     </script>
 </body>
 </html>
