@@ -27,14 +27,14 @@ function displayMessage(paragraph, message, success) {
 }
 
 function inputDigits(event, field, numberOfDigits, func) {
-    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'];
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab', 'Enter'];
     if (allowedKeys.includes(event.key)) {
+        if (event.key.includes('Enter') || event.key.includes('Tab')) {
+            func();
+        }
         return;
     }
     if(!/^\d$/.test(event.key) || field.value.length > numberOfDigits) {
         event.preventDefault();
-        if (event.key === 'Enter' || event.key === 'Tab') {
-            func();
-        }
     }
 }

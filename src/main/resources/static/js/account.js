@@ -4,6 +4,8 @@ const position_and_fullname = document.getElementById('position_and_fullname');
 const long_personnel_number = document.getElementById('long_personnel_number');
 const depotInfo = document.getElementById('depotInfo');
 const traction_service = document.getElementById('traction_service');
+const railway_full_title = document.getElementById('railway_full_title');
+const railway_abbreviation = document.getElementById('railway_abbreviation');
 
 document.addEventListener("DOMContentLoaded", async () => {
     await getCurrentUser();
@@ -48,4 +50,6 @@ async function renderUser(user) {
     long_personnel_number.innerText = `ЕКАСУТР: ${user.longPersonnelNumber}`;
     depotInfo.innerText = `${user.locomotiveDepotAbbreviation} (колонна № ${user.numberOfColumn})`;
     traction_service.innerText = `(${user.tractionKindTitle}, ${user.serviceTypeTitle})`;
+    railway_full_title.innerText = user.railwayFullTitle;
+    railway_abbreviation.innerText = user.railwayAbbreviation;
 }
