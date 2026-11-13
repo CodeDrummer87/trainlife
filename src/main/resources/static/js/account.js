@@ -1,11 +1,10 @@
 const currentMessage = document.getElementById('currentMessage');
 
+const reminderTab = document.getElementById('reminderTab');
 const position_and_fullname = document.getElementById('position_and_fullname');
 const long_personnel_number = document.getElementById('long_personnel_number');
-const depotInfo = document.getElementById('depotInfo');
 const traction_service = document.getElementById('traction_service');
 const railway_full_title = document.getElementById('railway_full_title');
-const railway_abbreviation = document.getElementById('railway_abbreviation');
 
 document.addEventListener("DOMContentLoaded", async () => {
     await getCurrentUser();
@@ -44,12 +43,12 @@ async function getCurrentUser() {
 }
 
 async function renderUser(user) {
+    reminderTab.innerText = `.:: ${user.locomotiveDepotAbbreviation.replace('-', '★')} (${user.railwayAbbreviation})`;
+    railway_full_title.innerText = user.railwayFullTitle;
+
     const fullName = user.fullName.split(' ');
     position_and_fullname.innerText = `${user.positionAbbreviate} ${fullName[0]} ${fullName[1].charAt(0)}.${fullName[2].charAt(0)}. 
-    (таб.№ ${user.personnelNumber})`;
-    long_personnel_number.innerText = `ЕКАСУТР: ${user.longPersonnelNumber}`;
-    depotInfo.innerText = `${user.locomotiveDepotAbbreviation} (колонна № ${user.numberOfColumn})`;
-    traction_service.innerText = `(${user.tractionKindTitle}, ${user.serviceTypeTitle})`;
-    railway_full_title.innerText = user.railwayFullTitle;
-    railway_abbreviation.innerText = user.railwayAbbreviation;
+    (таб.№ ${user.personnelNumber}, колонна № ${user.numberOfColumn})`;
+    traction_service.innerText = `(${user.tractionKindTitle}, ${user.serviceTypeTitle} движение)`;
+    long_personnel_number.innerText = `Таб.№ в ЕКАСУТР: ${user.longPersonnelNumber}`;
 }
