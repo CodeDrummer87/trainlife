@@ -25,3 +25,16 @@ function displayMessage(paragraph, message, success) {
         paragraph.innerText = '\u00A0';
     }, 3000);
 }
+
+function inputDigits(event, field, numberOfDigits, func) {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'];
+    if (allowedKeys.includes(event.key)) {
+        return;
+    }
+    if(!/^\d$/.test(event.key) || field.value.length > numberOfDigits) {
+        event.preventDefault();
+        if (event.key === 'Enter' || event.key === 'Tab') {
+            func();
+        }
+    }
+}

@@ -53,34 +53,25 @@ document.addEventListener("DOMContentLoaded", async function() {
         tabnum.focus();
     }
     tabnum.onkeydown = function(e) {
-        if(!/^\d$/.test(e.key) || tabnum.value.length > 4) {
-            e.preventDefault();
-            if (e.key === 'Enter' || e.key === 'Tab') {
-                tabnum_long.focus();
-            }
-        }
+        inputDigits(e, tabnum, 4, function() {
+            tabnum_long.focus();
+        });
     }
-    tabnum_long.onkeydown = function (e) {
-        if(!/^\d$/.test(e.key) || tabnum_long.value.length > 7) {
-            e.preventDefault();
-            if (e.key === 'Enter' || e.key === 'Tab') {
-                goTo(current + 1);
-            }
-        }
+    tabnum_long.onkeydown = function(e) {
+        inputDigits(e, tabnum_long, 7, function () {
+           goTo(current + 1);
+        });
     }
     await loadServiceTypes(traffic);
     await loadTractionKinds(traction);
     traction.onchange = function() {
         column.focus();
     }
-    column.onkeydown = (e) => {
-        if(!/^\d$/.test(e.key) || column.value.length > 1) {
-            e.preventDefault();
-            if (e.key === 'Enter' || e.key === 'Tab') {
-                goTo(current + 1);
-                fullname.focus();
-            }
-        }
+    column.onkeydown = function(e) {
+        inputDigits(e, column, 1, function() {
+            goTo(current + 1);
+            fullname.focus();
+        });
     }
     fullname.onkeydown = function(e) {
         if (e.key === ' ' && fullname.value.slice(-1) === ' ') {

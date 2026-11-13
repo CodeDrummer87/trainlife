@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> illegalArg(IllegalArgumentException e) {
         log.debug("Неверный запрос");
-        return ResponseEntity.badRequest().body(Map.of("error", "некорректный аргумент запроса"));
+        return ResponseEntity.badRequest().body(Map.of("error", "Пользователь с таким логином уже существует"));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
