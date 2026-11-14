@@ -30,21 +30,3 @@ async function register(username, password, currentMessage) {
     displayMessage(currentMessage, err.error, false);
     return false;
 }
-
-async function loadProfile() {
-    const me = await fetch('/api/auth/me', { credentials: 'include' });
-    if (me.status === 401) {
-        window.location.href = '/login'; return;
-    }
-    const data = await me.json();
-    const el = document.getElementById('username');
-    if (el) {
-        el.textContent = data.username + ' (' + data.role + ')';
-    }
-
-    const btn = document.getElementById('logout');
-    if (btn) btn.addEventListener('click', async () => {
-        await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-        window.location.href = '/login';
-    });
-}
