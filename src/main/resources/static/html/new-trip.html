@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Новая поездка</title>
     <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="../css/wizard.css">
 </head>
 
 <body>
@@ -27,12 +28,308 @@
                 <button>Настройки</button>
             </nav>
             <article>
+                <div class="progress" id="progress"></div>
+                <div class="stage" id="stage">
 
+
+                    <form class="form-card active" data-step="1" autocomplete="off">
+                        <div class="form-body">
+                            <h2>Явка</h2>
+                            <p class="hint">Дата, время и пункт явки</p>
+                            <div class="field">
+                                <label for="reportDate">Дата явки</label>
+                                <input type="date" id="reportDate" required>
+                            </div>
+                            <div class="field">
+                                <label for="reportTime">Время явки</label>
+                                <input type="time" id="reportTime" required>
+                            </div>
+                            <div class="field">
+                                <label for="reportPoint">Пункт явки</label>
+                                <select id="reportPoint" required>
+                                    <option value="" disabled selected>— выберите пункт —</option>
+                                    <option value="1">Станция 1</option>
+                                    <option value="2">Станция 2</option>
+                                    <option value="3">Станция 3</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button type="button" class="btn-next">Далее →</button>
+                        </div>
+                    </form>
+
+
+                    <form class="form-card" data-step="2" autocomplete="off">
+                        <div class="form-body">
+                            <h2>Тип поезда</h2>
+                            <p class="hint">Поездная работа, перегонка сплотки, следование резервом</p>
+                            <div class="field">
+                                <label for="trainType">Тип</label>
+                                <select id="trainType" required>
+                                    <option value="TRAIN" selected>Поезд</option>
+                                    <option value="DIT">Сплотка</option>
+                                    <option value="LER">Следование резервом</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button type="button" class="btn-back">← Назад</button>
+                            <button type="button" class="btn-next">Далее →</button>
+                        </div>
+                    </form>
+
+
+                    <form class="form-card" data-step="3" autocomplete="off">
+                        <div class="form-body">
+                            <h2>Локомотив</h2>
+                            <p class="hint">Серия и номер локомотива, депо приписки, количество ТБ</p>
+                            <div class="field-row">
+                                <div class="field">
+                                    <label for="locoSeries">Серия</label>
+                                    <select id="locoSeries" required>
+                                        <option value="" disabled selected>— серия —</option>
+                                        <option value="ВЛ10">ВЛ10</option>
+                                        <option value="2ЭС6">2ЭС6</option>
+                                        <option value="ВЛ80с">ВЛ80с</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label for="locoNumber">Номер</label>
+                                    <input type="text" id="locoNumber" placeholder="1234" required>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="locoDepot">Депо приписки</label>
+                                <select id="locoDepot" required>
+                                    <option value="" disabled selected>— выберите депо —</option>
+                                    <option value="1">Депо 1</option>
+                                    <option value="2">Депо 2</option>
+                                    <option value="3">Депо 3</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="locoShoes">Количество тормозных башмаков на борту</label>
+                                <input type="text" id="locoShoes" inputmode="numeric" placeholder="Например, 4" required>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button type="button" class="btn-back">← Назад</button>
+                            <button type="button" class="btn-next">Далее →</button>
+                        </div>
+                    </form>
+
+
+                    <form class="form-card" data-step="4" autocomplete="off">
+                        <div class="form-body">
+                            <h2 id="form4Title">Данные поезда</h2>
+                            <p class="hint" id="form4Hint">Номер поезда и параметры состава</p>
+
+                            <div class="variant" data-variant="TRAIN">
+                                <div class="field">
+                                    <label for="trainNumber">Номер поезда</label>
+                                    <input type="text" id="trainNumber" required>
+                                </div>
+                                <div class="field-row">
+                                    <div class="field">
+                                        <label for="trainWeight">Вес поезда</label>
+                                        <input type="text" id="trainWeight" inputmode="numeric" required>
+                                    </div>
+                                    <div class="field">
+                                        <label for="trainAxles">Оси</label>
+                                        <input type="text" id="trainAxles" inputmode="numeric" required>
+                                    </div>
+                                </div>
+                                <div class="field-row">
+                                    <div class="field">
+                                        <label for="trainLength">УД</label>
+                                        <input type="text" id="trainLength" required>
+                                    </div>
+                                    <div class="field">
+                                        <label for="trainTailCarNumber">ХВ</label>
+                                        <input type="text" id="trainTailCarNumber" required>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label for="trainSecuring">Закрепление (тормозными башмаками)</label>
+                                    <input type="text" id="trainSecuring" required>
+                                </div>
+                            </div>
+
+                            <div class="variant" data-variant="DIT" hidden>
+                                <div class="field">
+                                    <label for="ditNumber">Номер поезда</label>
+                                    <input type="text" id="ditNumber" required>
+                                </div>
+                                <div class="field">
+                                    <label>Локомотивы в сплотке</label>
+                                    <div id="ditList" class="dynamic-list"></div>
+                                    <button type="button" class="btn-add" id="addLocoBtn">+ добавить локомотив</button>
+                                </div>
+                            </div>
+
+                            <div class="variant" data-variant="LER" hidden>
+                                <div class="field">
+                                    <label for="lerNumber">Номер поезда</label>
+                                    <input type="text" id="lerNumber" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button type="button" class="btn-back">← Назад</button>
+                            <button type="button" class="btn-next">Далее →</button>
+                        </div>
+                    </form>
+
+
+                    <form class="form-card" data-step="5" autocomplete="off">
+                        <div class="form-body">
+                            <h2>Отправление</h2>
+                            <p class="hint">Станция и время отправления, литера сигнала</p>
+                            <div class="field">
+                                <label for="depStation">Станция отправления</label>
+                                <select id="depStation" required>
+                                    <option value="" disabled selected>— выберите станцию —</option>
+                                    <option value="1">Станция 1</option>
+                                    <option value="2">Станция 2</option>
+                                    <option value="3">Станция 3</option>
+                                </select>
+                            </div>
+                            <div class="field-row">
+                                <div class="field">
+                                    <label for="depTime">Время отправления</label>
+                                    <input type="time" id="depTime" required>
+                                </div>
+                                <div class="field">
+                                    <label for="depSignal">Литера сигнала</label>
+                                    <select id="depSignal" required>
+                                        <option value="" disabled selected>— литера —</option>
+                                        <option value="Ч1">Ч1</option>
+                                        <option value="Ч2">Ч2</option>
+                                        <option value="Ч3">Ч3</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button type="button" class="btn-back">← Назад</button>
+                            <button type="button" class="btn-next">Далее →</button>
+                        </div>
+                    </form>
+
+
+                    <form class="form-card" data-step="6" autocomplete="off">
+                        <div class="form-body">
+                            <h2>Проба тормозов</h2>
+                            <p class="hint" id="form6Hint">Места опробывания тормозов</p>
+
+                            <div class="variant" data-variant="TRAIN DIT">
+                                <div id="brakeTestList" class="dynamic-list"></div>
+                                <button type="button" class="btn-add" id="addBrakeBtn">+ добавить ещё одну пробу</button>
+                            </div>
+                            <div class="variant" data-variant="LER" hidden>
+                                <p class="static-note">Проба тормозов на первом удалении</p>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button type="button" class="btn-back">← Назад</button>
+                            <button type="button" class="btn-next">Далее →</button>
+                        </div>
+                    </form>
+
+
+                    <form class="form-card" data-step="7" autocomplete="off">
+                        <div class="form-body">
+                            <h2>Станции проследования</h2>
+                            <p class="hint">Добавьте станции и время проследования</p>
+                            <div id="passList" class="dynamic-list"></div>
+                            <button type="button" class="btn-add" id="addPassBtn">+ добавить станцию</button>
+                        </div>
+                        <div class="actions">
+                            <button type="button" class="btn-back">← Назад</button>
+                            <button type="button" class="btn-next">Далее →</button>
+                        </div>
+                    </form>
+
+
+                    <form class="form-card" data-step="8" autocomplete="off">
+                        <div class="form-body">
+                            <h2>Стоянки</h2>
+                            <p class="hint">Место и время остановки, время отправления</p>
+                            <div id="stopList" class="dynamic-list"></div>
+                            <button type="button" class="btn-add" id="addStopBtn">+ добавить стоянку</button>
+                        </div>
+                        <div class="actions">
+                            <button type="button" class="btn-back">← Назад</button>
+                            <button type="button" class="btn-next">Далее →</button>
+                        </div>
+                    </form>
+
+
+                    <form class="form-card" data-step="9" autocomplete="off">
+                        <div class="form-body">
+                            <h2>Заметки на полях</h2>
+                            <p class="hint">Сведения о пассажирах, приказы, отмены и прочее</p>
+                            <div class="field">
+                                <label for="notes">Заметки</label>
+                                <textarea id="notes" rows="6" placeholder="Важные и любопытные сведения и примечания…"></textarea>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button type="button" class="btn-back">← Назад</button>
+                            <button type="button" class="btn-next">Далее →</button>
+                        </div>
+                    </form>
+
+
+                    <form class="form-card" data-step="10" autocomplete="off">
+                        <div class="form-body">
+                            <h2>Прибытие</h2>
+                            <p class="hint">Станция и время прибытия, литера сигнала</p>
+                            <div class="field">
+                                <label for="arrStation">Станция прибытия</label>
+                                <select id="arrStation" required>
+                                    <option value="" disabled selected>— выберите станцию —</option>
+                                    <option value="1">Станция 1</option>
+                                    <option value="2">Станция 2</option>
+                                    <option value="3">Станция 3</option>
+                                </select>
+                            </div>
+                            <div class="field-row">
+                                <div class="field">
+                                    <label for="arrTime">Время прибытия</label>
+                                    <input type="time" id="arrTime" required>
+                                </div>
+                                <div class="field">
+                                    <label for="arrSignal">Литера сигнала</label>
+                                    <select id="arrSignal" required>
+                                        <option value="" disabled selected>— литера —</option>
+                                        <option value="Ч1">Ч1</option>
+                                        <option value="Ч2">Ч2</option>
+                                        <option value="Ч3">Ч3</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="field-with-button">
+                                <div class="field">
+                                    <label for="handoverTime">Время сдачи</label>
+                                    <input type="time" id="handoverTime" required>
+                                </div>
+                                <button type="button" class="btn-save btn-inline" id="saveBtn" disabled>Сохранить</button>
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button type="button" class="btn-back">← Назад</button>
+                            <button type="button" class="btn-add-train" id="addTrainBtn">+ Добавить ещё поезд</button>
+                        </div>
+                    </form>
+
+                </div>
+                <p id="currentMessage">&nbsp;</p>
             </article>
         </div>
         <footer>
             <p id="copyright"></p>
-            <p id="currentMessage">&nbsp;</p>
             <p>Андрей Бодров &#9733 code.drummer87@gmail.com</p>
         </footer>
     </div>

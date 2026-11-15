@@ -112,10 +112,7 @@ footer {
 
 nav {
     grid-area: N;
-}
-
-nav:hover {
-    border-color: rgba(30, 117, 16);
+    padding: 2vh 0 0 3vw;
 }
 
 article {
@@ -187,7 +184,7 @@ nav button {
     -webkit-appearance: none;
 }
 
-form button:hover,
+form button:not(form button:disabled):hover,
 nav button:not(.activated):hover {
     color: burlywood;
     background: rgba(31, 116, 136, 0.7);
@@ -202,10 +199,6 @@ nav button {
     color: #27da0f;
     background: rgba(27, 106, 119, 0.7);
     box-shadow: 0 0 5px 5px rgba(10, 86, 119, 0.7);
-}
-
-nav {
-    padding: 0 1.2vw;
 }
 /*.:: R E M I N D E R */
 .reminder {
@@ -279,3 +272,99 @@ nav {
     font-size: 1.1rem;
 }
 /*::::::::::::::::::::*/
+
+/* .:: NEW-TRIP :: */
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+}
+
+.radio-group .radio {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: normal;
+    color: burlywood;
+}
+
+.radio-group .radio input {
+    width: auto;
+    margin: 0;
+    accent-color: #27da0f;
+}
+
+.dynamic-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.dynamic-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.dynamic-row > * {
+    margin-bottom: 0 !important;
+}
+
+.dynamic-row .btn-remove {
+    flex: 0 0 36px;
+    width: 36px;
+    padding: 8px 0;
+    text-align: center;
+    color: indianred;
+    background: rgba(18, 67, 76, 0.7);
+    border-color: rgba(31, 116, 136, 0.7);
+}
+
+.dynamic-row .btn-remove:hover {
+    background: rgba(160, 40, 40, 0.5);
+    box-shadow: 0 0 5px 5px rgba(200, 60, 60, 0.4);
+}
+
+.btn-add {
+    width: 100%;
+    margin-bottom: 16px;
+    color: #27da0f;
+    background: rgba(18, 67, 76, 0.7);
+    border: 1px dashed rgba(39, 218, 15, 0.6);
+}
+
+.btn-add:hover {
+    background: rgba(31, 116, 136, 0.7);
+}
+
+.static-note {
+    padding: 10px 12px;
+    margin: 0 0 16px;
+    border-radius: 4px;
+    background: rgba(18, 67, 76, 0.5);
+    color: #27da0f;
+    text-align: left;
+}
+
+.actions {
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.actions .btn-add-train {
+    flex: 1 1 100%;
+    color: burlywood;
+    background: rgba(18, 67, 76, 0.7);
+    border-color: rgba(31, 116, 136, 0.7);
+}
+
+.btn-add-train:disabled {
+    color: #105c68;
+    opacity: 0.5;
+    cursor: not-allowed;
+}

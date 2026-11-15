@@ -2,9 +2,6 @@ const currentMessage = document.getElementById('currentMessage');
 
 document.addEventListener("DOMContentLoaded", async function() {
 
-    const progress = document.getElementById('progress');
-    const stage = document.getElementById('stage');
-    const forms = Array.from(stage.querySelectorAll('.form-card'));
     const saveBtn = document.getElementById('saveBtn');
 
     const railway = document.getElementById('railway');
@@ -17,29 +14,6 @@ document.addEventListener("DOMContentLoaded", async function() {
     const fullname = document.getElementById('fullname');
     const birthday = document.getElementById('birthday');
     const nickname = document.getElementById('nickname');
-
-//region .:: Progress bar
-    for (let i = 0; i < forms.length; i++) {
-        const dot = document.createElement('span');
-        dot.className = 'dot' + (i === 0 ? ' active' : '');
-        progress.appendChild(dot);
-    }
-
-    let current = 0;
-
-    const dots = Array.from(progress.children);
-    for (let i = 0; i < dots.length; i++) {
-        dots[i].classList.toggle('active', i === current);
-        dots[i].classList.toggle('done', i < current);
-    }
-
-    function updateDots() {
-        dots.forEach((dot, i) => {
-            dot.classList.toggle('active', i === current);
-            dot.classList.toggle('done', i < current);
-        });
-    }
-//endregion
 
 //region .:: Events chain
     await loadRailways(railway);

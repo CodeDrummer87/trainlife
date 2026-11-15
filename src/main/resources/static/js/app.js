@@ -34,6 +34,30 @@ function renderProfile(data) {
     }
 }
 
+//region .:: Progress bar
+
+const progress = document.getElementById('progress');
+const stage = document.getElementById('stage');
+const forms = stage ? Array.from(stage.querySelectorAll('.form-card')) : [];
+let current = 0;
+
+for (let i = 0; i < forms.length; i++) {
+    const dot = document.createElement('span');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    progress.appendChild(dot);
+}
+
+const dots = progress ? Array.from(progress.children) : [];
+
+function updateDots() {
+    dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === current);
+        dot.classList.toggle('done', i < current);
+    });
+}
+
+//endregion
+
 function createDefaultOption(text) {
     const placeholder = document.createElement('option');
     placeholder.value = '';
