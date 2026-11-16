@@ -1,4 +1,5 @@
 const URI = '/api/v1';
+const $ = (id) => document.getElementById(id);
 
 let currentProfilePromise = null;
 async function loadProfile() {
@@ -36,8 +37,8 @@ function renderProfile(data) {
 
 //region .:: Progress bar
 
-const progress = document.getElementById('progress');
-const stage = document.getElementById('stage');
+const progress = $('progress');
+const stage = $('stage');
 const forms = stage ? Array.from(stage.querySelectorAll('.form-card')) : [];
 let current = 0;
 

@@ -13,10 +13,10 @@ const REMINDER_TEMPLATE = `
 </div>`;
 
 function ensureReminderMarkup() {
-    if (document.getElementById('reminder')) return;
+    if ($('reminder')) return;
     document.body.insertAdjacentHTML('afterbegin', REMINDER_TEMPLATE);
 
-    const drawer = document.getElementById('reminder');
+    const drawer = $('reminder');
     drawer.addEventListener('click', (e) => {
         e.stopPropagation();
         drawer.classList.toggle('open');
@@ -54,11 +54,11 @@ async function fetchCurrentUser() {
 }
 
 function renderReminder(user) {
-    const reminderTab        = document.getElementById('reminderTab');
-    const railway_full_title = document.getElementById('railway_full_title');
-    const position_and_fullname = document.getElementById('position_and_fullname');
-    const traction_service   = document.getElementById('traction_service');
-    const long_personnel_number = document.getElementById('long_personnel_number');
+    const reminderTab = $('reminderTab');
+    const railway_full_title = $('railway_full_title');
+    const position_and_fullname = $('position_and_fullname');
+    const traction_service = $('traction_service');
+    const long_personnel_number = $('long_personnel_number');
 
     if (!reminderTab) return;
 

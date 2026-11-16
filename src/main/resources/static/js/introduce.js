@@ -1,19 +1,19 @@
-const currentMessage = document.getElementById('currentMessage');
+const currentMessage = $('currentMessage');
 
 document.addEventListener("DOMContentLoaded", async function() {
 
-    const saveBtn = document.getElementById('saveBtn');
+    const saveBtn = $('saveBtn');
 
-    const railway = document.getElementById('railway');
-    const position = document.getElementById('position');
-    const tabnum = document.getElementById('tabnum');
-    const tabnum_long = document.getElementById('tabnum_long');
-    const traffic = document.getElementById('traffic');
-    const traction = document.getElementById('traction');
-    const column = document.getElementById('column');
-    const fullname = document.getElementById('fullname');
-    const birthday = document.getElementById('birthday');
-    const nickname = document.getElementById('nickname');
+    const railway = $('railway');
+    const position = $('position');
+    const tabnum = $('tabnum');
+    const tabnum_long = $('tabnum_long');
+    const traffic = $('traffic');
+    const traction = $('traction');
+    const column = $('column');
+    const fullname = $('fullname');
+    const birthday = $('birthday');
+    const nickname = $('nickname');
 
 //region .:: Events chain
     await loadRailways(railway);
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         e.preventDefault();
 
         const payload = {
-            depotId: document.getElementById('depot').value,
+            depotId: $('depot').value,
             positionId: position.value,
             personnelNumber: tabnum.value,
             longPersonnelNumber: tabnum_long.value,
@@ -171,7 +171,7 @@ async function loadRailways(select) {
 }
 
 async function loadLocomotiveDepots(railwayId) {
-    const select = document.getElementById('depot');
+    const select = $('depot');
 
     try {
         const result = await fetch(URI + `/locomotive-depots/by-railway/${railwayId}`, {

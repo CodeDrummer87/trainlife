@@ -1,4 +1,4 @@
-const newTripButton = document.getElementById('newTripButton');
+const newTripButton = $('newTripButton');
 
 document.addEventListener("DOMContentLoaded", async () => {
     renderProfile(await loadProfile());

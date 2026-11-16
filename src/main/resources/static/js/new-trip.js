@@ -1,9 +1,39 @@
-const currentMessage = document.getElementById('currentMessage');
+const currentMessage = $('currentMessage');
+
+const reportDate    = $('reportDate');
+const reportTime    = $('reportTime');
+const reportPoint   = $('reportPoint');
+const trainTypeSel  = $('trainType');
+const locoSeries    = $('locoSeries');
+const locoNumber    = $('locoNumber');
+const locoDepot     = $('locoDepot');
+const locoShoes     = $('locoShoes');
+const depStation    = $('depStation');
+const depTime       = $('depTime');
+const depSignal     = $('depSignal');
+const arrStation    = $('arrStation');
+const arrTime       = $('arrTime');
+const arrSignal     = $('arrSignal');
+const handoverTime  = $('handoverTime');
+const form4Title    = $('form4Title');
+const form4Hint     = $('form4Hint');
+const form6Hint     = $('form6Hint');
+const ditList       = $('ditList');
+const brakeTestList = $('brakeTestList');
+const passList      = $('passList');
+const stopList      = $('stopList');
+const addPassBtn    = $('addPassBtn');
+const addStopBtn    = $('addStopBtn');
+const addLocoBtn    = $('addLocoBtn');
+const addBrakeBtn   = $('addBrakeBtn');
+const notes         = $('notes');
 
 document.addEventListener('DOMContentLoaded', async () => {
     renderProfile(await loadProfile());
     await mountUserReminder();
     initNewTrip();
+
+    await getStationsWithTurnoutPoint();
 });
 
 document.getElementById('accountButton').onclick = () => {
@@ -27,44 +57,14 @@ function createEmptyTrip() {
 }
 
 function initNewTrip() {
-    const saveBtn = document.getElementById('saveBtn');
-    const addTrainBtn = document.getElementById('addTrainBtn');
+    const saveBtn = $('saveBtn');
+    const addTrainBtn = $('addTrainBtn');
 
     const report = { date: '', time: '', point: '', handoverTime: '' };
     let currentTrip = createEmptyTrip();
     const trips = [];
 
     let currentStep = 1;
-
-    //.:: DOM :::
-    const $ = (id) => document.getElementById(id);
-    const reportDate    = $('reportDate');
-    const reportTime    = $('reportTime');
-    const reportPoint   = $('reportPoint');
-    const trainTypeSel  = $('trainType');
-    const locoSeries    = $('locoSeries');
-    const locoNumber    = $('locoNumber');
-    const locoDepot     = $('locoDepot');
-    const locoShoes     = $('locoShoes');
-    const depStation    = $('depStation');
-    const depTime       = $('depTime');
-    const depSignal     = $('depSignal');
-    const arrStation    = $('arrStation');
-    const arrTime       = $('arrTime');
-    const arrSignal     = $('arrSignal');
-    const handoverTime  = $('handoverTime');
-    const form4Title    = $('form4Title');
-    const form4Hint     = $('form4Hint');
-    const form6Hint     = $('form6Hint');
-    const ditList       = $('ditList');
-    const brakeTestList = $('brakeTestList');
-    const passList      = $('passList');
-    const stopList      = $('stopList');
-    const addPassBtn    = $('addPassBtn');
-    const addStopBtn    = $('addStopBtn');
-    const addLocoBtn    = $('addLocoBtn');
-    const addBrakeBtn   = $('addBrakeBtn');
-    const notes         = $('notes');
 
     function goTo(index) {
         if (index < 0 || index >= forms.length) return;
@@ -480,4 +480,38 @@ function initNewTrip() {
     applyVariant();
     brakeTestList.appendChild(makeBrakeRow());
     checkComplete();
+}
+
+async function getStationsWithTurnoutPoint() {
+    try {
+        const result = await fetch(URI + "/stations/with-turnout-point", {
+            headers: {'Accept': 'application/json'},
+            credentials: 'include'
+        });
+
+        if (!result.ok) {
+            displayMessage(currentMessage, 'Ошибка загрузки списка станций', false);
+            throw new Error(`HTTP ${result.status}`);
+        }
+
+        const stations = await result.json();
+        await renderStations(stations);
+    } catch (err) {
+        displayMessage(currentMessage, 'Не удалось загрузить список пунктов явки', false);
+        reportPoint.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
+        reportPoint.disabled = true;
+    }
+}
+
+async function renderStations(data) {
+    reportPoint.replaceChildren();
+    const placeholder = createDefaultOption('— выберите пункт явки —');
+    reportPoint.appendChild(placeholder);
+
+    data
+        .slice()
+        .forEach(r => {
+            const opt = createOption(r.id, `${r.stationTitle} (${r.stationAbbreviation})`);
+            reportPoint.appendChild(opt);
+        });
 }
