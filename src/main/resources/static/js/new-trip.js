@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const currentMessage = document.getElementById('currentMessage');
 
     const reportDate    = document.getElementById('reportDate');
+    setCurrentDate(reportDate);
+
     const reportTime    = document.getElementById('reportTime');
     const reportPoint   = document.getElementById('reportPoint');
     const trainTypeSel  = document.getElementById('trainType');
@@ -42,6 +44,39 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderProfile(await loadProfile());
     await mountUserReminder();
     await initNewTrip();
+
+    function setCurrentDate(reportDate) {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        reportDate.value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    reportDate.onblur = (e) => {
+        checkDataValue(e);
+    };
+    reportDate.onkeydown = (e) => {
+        const allowed = ['Enter', 'Tab'];
+        if (allowed.includes(e.key)) {
+            checkDataValue(e);
+        }
+    }
+
+    function checkDataValue(e) {
+        let v = e.target.value;
+
+        const parts = v.split('-');
+        const year = Number(parts[0]);
+        const currentYear = new Date().getFullYear();
+
+        if (!Number.isFinite(year) || year > currentYear || year < Number(1900)) {
+            displayMessage(currentMessage, 'Некорректно указан год. Установлена текущая дата', false);
+            setCurrentDate(reportDate);
+            return;
+        }
+        reportTime.focus();
+    }
 
     document.getElementById('accountButton').onclick = () => {
         window.location.href = '/account';
