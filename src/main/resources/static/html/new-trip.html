@@ -8,6 +8,18 @@
     <title>Новая поездка</title>
     <link rel="stylesheet" href="../css/app.css">
     <link rel="stylesheet" href="../css/wizard.css">
+    <style>
+        .inner-container {
+            grid-template-columns: 20% 60% 20%;
+            grid-template-areas:
+            "H H H"
+            "N A F";
+        }
+        aside {
+            grid-area: F;
+            padding: 2vh 3vw 0 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -330,6 +342,9 @@
                 </div>
                 <p id="currentMessage">&nbsp;</p>
             </article>
+            <aside>
+                <p>Здесь будет функционал загрузки фото локомотивов</p>
+            </aside>
         </div>
         <footer>
             <p id="copyright"></p>
