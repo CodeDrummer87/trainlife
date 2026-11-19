@@ -24,4 +24,13 @@ public class LocomotiveDepotService {
                 ))
                 .toList();
     }
+
+    public List<LocomotiveDepotAbbreviateDto> getAllDepots() {
+        return locomotiveDepotRepository.findAllOrderByShortTitle().stream()
+                .map(d -> new LocomotiveDepotAbbreviateDto(
+                        d.getId(),
+                        d.getShortTitle()
+                ))
+                .toList();
+    }
 }

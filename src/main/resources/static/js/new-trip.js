@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const reportTime    = document.getElementById('reportTime');
     const reportPoint   = document.getElementById('reportPoint');
+    await getStationsWithTurnoutPoint();
     const trainTypeSel  = document.getElementById('trainType');
 
     const locoType      = document.getElementById('locoType');
@@ -19,8 +20,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     await renderLocomotiveSeries(locoSeriesArr, 1);
 
     const locoNumber    = document.getElementById('locoNumber');
+
     const locoDepot     = document.getElementById('locoDepot');
+    const locoDepotsArr = sessionStorage.getItem('locomotive-depots') ?
+        JSON.parse(sessionStorage.getItem('locomotive-depots')) : await getAllLocomotiveDepots();
+    await renderLocomotiveDepots(locoDepotsArr);
+
     const locoShoes     = document.getElementById('locoShoes');
+    const trainNumber   = document.getElementById('trainNumber');
     const depStation    = document.getElementById('depStation');
     const depTime       = document.getElementById('depTime');
     const depSignal     = document.getElementById('depSignal');
@@ -84,6 +91,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    locoShoes.onkeydown = function(e) {
+        inputDigits(e, locoShoes, 2, function() {
+            trainNumber.focus();
+        });
+    }
+
     document.getElementById('accountButton').onclick = () => {
         window.location.href = '/account';
     }
@@ -144,8 +157,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateDots();
             checkComplete();
         }
-//.:::::::::::::::::::::::::::::::::::::: S T A R T ::::::::::::::::::::::::::::::::::::::::::
-        await getStationsWithTurnoutPoint();
 
         stage.addEventListener('click', (e) => {
             const btn = e.target.closest('button');
@@ -249,7 +260,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const type = currentTrip.trainType;
             if (type === 'TRAIN') {
                 currentTrip.train = {
-                    number: document.getElementById('trainNumber').value.trim(),
+                    number: trainNumber.value.trim(),
                     weight: document.getElementById('trainWeight').value.trim(),
                     axles:  document.getElementById('trainAxles').value.trim(),
                     length: document.getElementById('trainLength').value.trim(),
@@ -646,6 +657,41 @@ document.addEventListener('DOMContentLoaded', async () => {
             .forEach(t => {
                 const opt = createOption(t.id, `${t.title}`);
                 locoSeries.appendChild(opt);
+            });
+    }
+
+    async function getAllLocomotiveDepots() {
+        try {
+            const result = await fetch(URI + '/locomotive-depots', {
+                headers: {'Accept': 'application/json'},
+                credentials: 'include'
+            });
+
+            if (!result.ok) {
+                displayMessage(currentMessage, 'Ошибка загрузки списка депо', false);
+                throw new Error(`HTTP: ${result.status}`);
+            }
+
+            const data = await result.json();
+            sessionStorage.setItem('locomotive-depots', JSON.stringify(data));
+            return data;
+        } catch (err) {
+            displayMessage(currentMessage, 'Не удалось загрузить список локомотивных депо', false);
+            locoDepot.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
+            locoDepot.disabled = true;
+        }
+    }
+
+    async function renderLocomotiveDepots(data) {
+        locoDepot.replaceChildren();
+        const placeholder = createDefaultOption('выберите депо приписки');
+        locoDepot.appendChild(placeholder);
+
+        data
+            .slice()
+            .forEach(t => {
+                const opt = createOption(t.id, `${t.shortTitle}`);
+                locoDepot.appendChild(opt);
             });
     }
 });
