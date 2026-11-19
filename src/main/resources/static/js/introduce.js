@@ -1,28 +1,26 @@
-const currentMessage = $('currentMessage');
-
 document.addEventListener("DOMContentLoaded", async function() {
+    const currentMessage = document.getElementById('currentMessage');
+    const saveBtn = document.getElementById('saveBtn');
 
-    const saveBtn = $('saveBtn');
-
-    const railway = $('railway');
-    const position = $('position');
-    const tabnum = $('tabnum');
-    const tabnum_long = $('tabnum_long');
-    const traffic = $('traffic');
-    const traction = $('traction');
-    const column = $('column');
-    const fullname = $('fullname');
-    const birthday = $('birthday');
-    const nickname = $('nickname');
+    const railway = document.getElementById('railway');
+    const position = document.getElementById('position');
+    const tabnum = document.getElementById('tabnum');
+    const tabnum_long = document.getElementById('tabnum_long');
+    const traffic = document.getElementById('traffic');
+    const traction = document.getElementById('traction');
+    const column = document.getElementById('column');
+    const fullname = document.getElementById('fullname');
+    const birthday = document.getElementById('birthday');
+    const nickname = document.getElementById('nickname');
 
 //region .:: Events chain
-    await loadRailways(railway);
+    await loadRailways(railway, currentMessage);
     railway.onchange = async function(e) {
         const railwayId = e.target.value;
         if (!railwayId) return;
-        await loadLocomotiveDepots(railwayId);
+        await loadLocomotiveDepots(railwayId, currentMessage);
     }
-    await loadPositions(position);
+    await loadPositions(position, currentMessage);
     position.onchange = function() {
         tabnum.focus();
     }
@@ -36,8 +34,8 @@ document.addEventListener("DOMContentLoaded", async function() {
            goTo(current + 1);
         });
     }
-    await loadServiceTypes(traffic);
-    await loadTractionKinds(traction);
+    await loadServiceTypes(traffic, currentMessage);
+    await loadTractionKinds(traction, currentMessage);
     traction.onchange = function() {
         column.focus();
     }
@@ -66,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         e.preventDefault();
 
         const payload = {
-            depotId: $('depot').value,
+            depotId: document.getElementById('depot').value,
             positionId: position.value,
             personnelNumber: tabnum.value,
             longPersonnelNumber: tabnum_long.value,
@@ -78,7 +76,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             nickname: nickname.value.trim()
         }
 
-        submitIntroduce(payload);
+        submitIntroduce(payload, currentMessage);
     }
 //endregion
 
@@ -138,7 +136,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     stage.addEventListener('change', checkComplete);
 });
 
-async function loadRailways(select) {
+async function loadRailways(select, currentMessage) {
 
     try {
         const result = await fetch(URI + "/railways", {
@@ -147,7 +145,7 @@ async function loadRailways(select) {
         });
 
         if (!result.ok) {
-            displayMessage(introduceCurrentMessage, 'Ошибка загрузки данных', false);
+            displayMessage(currentMessage, 'Ошибка загрузки данных', false);
             throw new Error(`HTTP ${result.status}`);
         }
 
@@ -164,14 +162,14 @@ async function loadRailways(select) {
                 select.appendChild(opt);
             });
     } catch (err) {
-        displayMessage(introduceCurrentMessage, 'Не удалось загрузить список железных дорог', false);
+        displayMessage(currentMessage, 'Не удалось загрузить список железных дорог', false);
         select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
         select.disabled = true;
     }
 }
 
-async function loadLocomotiveDepots(railwayId) {
-    const select = $('depot');
+async function loadLocomotiveDepots(railwayId, currentMessage) {
+    const select = document.getElementById('depot');
 
     try {
         const result = await fetch(URI + `/locomotive-depots/by-railway/${railwayId}`, {
@@ -180,7 +178,7 @@ async function loadLocomotiveDepots(railwayId) {
         });
 
         if (!result.ok) {
-            displayMessage(introduceCurrentMessage, 'Ошибка загрузки данных', false);
+            displayMessage(currentMessage, 'Ошибка загрузки данных', false);
             throw new Error(`HTTP ${result.status}`);
         }
 
@@ -201,13 +199,13 @@ async function loadLocomotiveDepots(railwayId) {
                 select.appendChild(opt);
             });
     } catch (err) {
-        displayMessage(introduceCurrentMessage, 'Не удалось загрузить список депо для данной дороги', false);
+        displayMessage(currentMessage, 'Не удалось загрузить список депо для данной дороги', false);
         select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
         select.disabled = true;
     }
 }
 
-async function loadPositions(select) {
+async function loadPositions(select, currentMessage) {
 
     try {
         const result = await fetch(URI + "/positions", {
@@ -216,7 +214,7 @@ async function loadPositions(select) {
         });
 
         if (!result.ok) {
-            displayMessage(introduceCurrentMessage, 'Ошибка загрузки данных', false);
+            displayMessage(currentMessage, 'Ошибка загрузки данных', false);
             throw new Error(`HTTP ${result.status}`);
         }
 
@@ -233,13 +231,13 @@ async function loadPositions(select) {
                 select.appendChild(opt);
             });
     } catch (err) {
-        displayMessage(introduceCurrentMessage, 'Не удалось загрузить список должностей', false);
+        displayMessage(currentMessage, 'Не удалось загрузить список должностей', false);
         select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
         select.disabled = true;
     }
 }
 
-async function loadServiceTypes(select) {
+async function loadServiceTypes(select, currentMessage) {
 
     try {
         const result = await fetch(URI + "/service-types", {
@@ -248,7 +246,7 @@ async function loadServiceTypes(select) {
         });
 
         if (!result.ok) {
-            displayMessage(introduceCurrentMessage, 'Ошибка загрузки данных', false);
+            displayMessage(currentMessage, 'Ошибка загрузки данных', false);
             throw new Error(`HTTP ${result.status}`);
         }
 
@@ -265,13 +263,13 @@ async function loadServiceTypes(select) {
                 select.appendChild(opt);
             });
     } catch (err) {
-        displayMessage(introduceCurrentMessage, 'Не удалось загрузить виды движения', false);
+        displayMessage(currentMessage, 'Не удалось загрузить виды движения', false);
         select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
         select.disabled = true;
     }
 }
 
-async function loadTractionKinds(select) {
+async function loadTractionKinds(select, currentMessage) {
 
     try {
         const result = await fetch(URI + "/traction-kinds", {
@@ -280,7 +278,7 @@ async function loadTractionKinds(select) {
         });
 
         if (!result.ok) {
-            displayMessage(introduceCurrentMessage, 'Ошибка загрузки данных', false);
+            displayMessage(currentMessage, 'Ошибка загрузки данных', false);
             throw new Error(`HTTP ${result.status}`);
         }
 
@@ -297,13 +295,13 @@ async function loadTractionKinds(select) {
                 select.appendChild(opt);
             });
     } catch (err) {
-        displayMessage(introduceCurrentMessage, 'Не удалось загрузить виды тяги', false);
+        displayMessage(currentMessage, 'Не удалось загрузить виды тяги', false);
         select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
         select.disabled = true;
     }
 }
 
-async function submitIntroduce(introduceData) {
+async function submitIntroduce(introduceData, currentMessage) {
     const res = await fetch(URI + '/users/introduce', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -313,8 +311,6 @@ async function submitIntroduce(introduceData) {
     if (res.ok) {
         const data = await res.json();
         displayMessage(currentMessage, data.message, true);
-        console.log("Успех");
-        console.log(currentMessage);
         setTimeout(() => {
             window.location.href = '/account';
         }, 3000);

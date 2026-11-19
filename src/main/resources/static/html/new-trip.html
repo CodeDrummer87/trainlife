@@ -47,10 +47,7 @@
                             <div class="field">
                                 <label for="reportPoint">Пункт явки</label>
                                 <select id="reportPoint" required>
-                                    <option value="" disabled selected>— выберите пункт —</option>
-                                    <option value="1">Станция 1</option>
-                                    <option value="2">Станция 2</option>
-                                    <option value="3">Станция 3</option>
+                                    <option value="" disabled selected>Загрузка…</option>
                                 </select>
                             </div>
                         </div>
@@ -85,6 +82,12 @@
                             <h2>Локомотив</h2>
                             <p class="hint">Серия и номер локомотива, депо приписки, количество ТБ</p>
                             <div class="field-row">
+                                <div class="field">
+                                    <label for="locoType">Тип</label>
+                                    <select id="locoType" required>
+                                        <option value="" disabled selected>Загрузка…</option>
+                                    </select>
+                                </div>
                                 <div class="field">
                                     <label for="locoSeries">Серия</label>
                                     <select id="locoSeries" required>

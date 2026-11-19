@@ -12,11 +12,18 @@ const REMINDER_TEMPLATE = `
     </div>
 </div>`;
 
+async function mountUserReminder() {
+    ensureReminderMarkup();
+    const user = await fetchCurrentUser();
+    if (user) renderReminder(user);
+    return user;
+}
+
 function ensureReminderMarkup() {
-    if ($('reminder')) return;
+    if (document.getElementById('reminder')) return;
     document.body.insertAdjacentHTML('afterbegin', REMINDER_TEMPLATE);
 
-    const drawer = $('reminder');
+    const drawer = document.getElementById('reminder');
     drawer.addEventListener('click', (e) => {
         e.stopPropagation();
         drawer.classList.toggle('open');
@@ -54,11 +61,11 @@ async function fetchCurrentUser() {
 }
 
 function renderReminder(user) {
-    const reminderTab = $('reminderTab');
-    const railway_full_title = $('railway_full_title');
-    const position_and_fullname = $('position_and_fullname');
-    const traction_service = $('traction_service');
-    const long_personnel_number = $('long_personnel_number');
+    const reminderTab = document.getElementById('reminderTab');
+    const railway_full_title = document.getElementById('railway_full_title');
+    const position_and_fullname = document.getElementById('position_and_fullname');
+    const traction_service = document.getElementById('traction_service');
+    const long_personnel_number = document.getElementById('long_personnel_number');
 
     if (!reminderTab) return;
 
@@ -71,11 +78,4 @@ function renderReminder(user) {
         `\nТаб.№ ${user.personnelNumber}, колонна № ${user.numberOfColumn}`;
     traction_service.innerText = `(${user.tractionKindTitle}, ${user.serviceTypeTitle} движение)`;
     long_personnel_number.innerText = `Таб.№ в ЕКАСУТР: ${user.longPersonnelNumber}`;
-}
-
-async function mountUserReminder() {
-    ensureReminderMarkup();
-    const user = await fetchCurrentUser();
-    if (user) renderReminder(user);
-    return user;
 }
