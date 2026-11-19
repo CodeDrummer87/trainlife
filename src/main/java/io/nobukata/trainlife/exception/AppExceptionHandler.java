@@ -2,6 +2,7 @@ package io.nobukata.trainlife.exception;
 
 import io.nobukata.trainlife.exception.user.LongPersonnelNumberExistsException;
 import io.nobukata.trainlife.exception.user.NicknameAlreadyExistsException;
+import io.nobukata.trainlife.exception.user.PersonnelNumberExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,6 +22,13 @@ public class AppExceptionHandler {
 
     @ExceptionHandler(LongPersonnelNumberExistsException.class)
     public ResponseEntity<?> handleLongPersonnelNumberExists(LongPersonnelNumberExistsException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(PersonnelNumberExistsException.class)
+    public ResponseEntity<?> handlePersonnelNumberExists(PersonnelNumberExistsException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("error", ex.getMessage()));

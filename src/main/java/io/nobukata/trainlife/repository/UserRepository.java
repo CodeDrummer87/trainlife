@@ -24,4 +24,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByNickname(String nickname);
     Boolean existsByLongPersonnelNumber(Integer longPersonnelNumber);
+    Boolean existsByPersonnelNumberAndLocomotiveDepotId(Integer personnelNumber, Long locomotiveDepotId);
 }
