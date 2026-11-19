@@ -21,4 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "locomotiveDepot"})
     @Query("select u from User u where u.account.username = :username")
     Optional<User> findWithDetailsByAccountUsername(@Param("username") String username);
+
+    Boolean existsByNickname(String nickname);
+    Boolean existsByLongPersonnelNumber(Integer longPersonnelNumber);
 }

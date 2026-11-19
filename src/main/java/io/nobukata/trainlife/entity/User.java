@@ -22,6 +22,7 @@ public class User {
     @JoinColumn(name = "account_id", nullable = false, unique = true)
     private Account account;
 
+    @Column(unique = true)
     private String nickname;
 
     @Column(name = "full_name")
@@ -40,7 +41,7 @@ public class User {
     @Column(name = "personnel_number")
     private Integer personnelNumber;
 
-    @Column(name = "long_personnel_number")
+    @Column(name = "long_personnel_number", unique = true)
     private Integer longPersonnelNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)

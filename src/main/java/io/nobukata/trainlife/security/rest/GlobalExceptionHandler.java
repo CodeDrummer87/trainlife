@@ -73,6 +73,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> unreadable(HttpMessageNotReadableException e) {
         log.debug("Нечитаемое тело запроса: {}", e.getMessage());
-        return ResponseEntity.badRequest().body(Map.of("error", "Некорректный формат запроса"));
+        return ResponseEntity.badRequest().body(Map.of("error", "Поля содержат некорректные данные"));
     }
 }

@@ -25,12 +25,12 @@ document.addEventListener("DOMContentLoaded", async function() {
         tabnum.focus();
     }
     tabnum.onkeydown = function(e) {
-        inputDigits(e, tabnum, 4, function() {
+        inputDigits(e, tabnum, 5, function() {
             tabnum_long.focus();
         });
     }
     tabnum_long.onkeydown = function(e) {
-        inputDigits(e, tabnum_long, 7, function () {
+        inputDigits(e, tabnum_long, 8, function () {
            goTo(current + 1);
         });
     }
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         column.focus();
     }
     column.onkeydown = function(e) {
-        inputDigits(e, column, 1, function() {
+        inputDigits(e, column, 2, function() {
             goTo(current + 1);
             fullname.focus();
         });
@@ -56,8 +56,11 @@ document.addEventListener("DOMContentLoaded", async function() {
         }
     }
     nickname.onkeydown = function(e) {
-        if (!(/^[A-Za-zА-Яа-яЁё]{1,10}$/).test(e.key)) {
-            e.preventDefault();
+        const allowed = ['Backspace', 'Enter', 'ArrowLeft', 'ArrowRight'];
+        if (!(/^[A-Za-zА-Яа-яЁё\d]{1,15}$/).test(e.key) || nickname.value.length >= 15) {
+            if (!allowed.includes(e.key)) {
+                e.preventDefault();
+            }
         }
     }
     saveBtn.onclick = function(e) {
@@ -79,6 +82,40 @@ document.addEventListener("DOMContentLoaded", async function() {
         submitIntroduce(payload, currentMessage);
     }
 //endregion
+
+    function setCurrentDate(birthday) {
+        const today = new Date();
+        const yyyy = today.getFullYear() - 16;
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        birthday.value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    birthday.onblur = (e) => {
+        checkDataValue(e);
+    };
+    birthday.onkeydown = (e) => {
+        const allowed = ['Enter', 'Tab'];
+        if (allowed.includes(e.key)) {
+            checkDataValue(e);
+        }
+    }
+
+    function checkDataValue(e) {
+        let v = e.target.value;
+
+        const parts = v.split('-');
+        const year = Number(parts[0]);
+        const controlYear = new Date().getFullYear() - 15;
+
+        if (!Number.isFinite(year) || year > controlYear || year < Number(1950)) {
+            displayMessage(currentMessage, 'Некорректный год рождения. Установлено значение по умолчанию', false);
+            setCurrentDate(birthday);
+            return;
+        }
+        goTo(current + 1);
+        nickname.focus();
+    }
 
 
     function checkComplete() {
@@ -317,6 +354,6 @@ async function submitIntroduce(introduceData, currentMessage) {
         return true;
     }
     const err = await res.json().catch(() => ({}));
-    console.log(err.error);
+    displayMessage(currentMessage, err.error, false);
     return false;
 }

@@ -92,7 +92,7 @@ function inputDigits(event, field, numberOfDigits, func) {
         }
         return;
     }
-    if(!/^\d$/.test(event.key) || field.value.length > numberOfDigits) {
+    if(!/^\d$/.test(event.key) || field.value.length > numberOfDigits - 1) {
         event.preventDefault();
     }
 }

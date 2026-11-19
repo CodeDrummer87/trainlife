@@ -78,6 +78,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         reportTime.focus();
     }
 
+    locoNumber.onkeydown = function(e) {
+        inputDigits(e, locoNumber, 4, function() {
+            locoDepot.focus();
+        });
+    }
+
     document.getElementById('accountButton').onclick = () => {
         window.location.href = '/account';
     }

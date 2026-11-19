@@ -3,6 +3,8 @@ package io.nobukata.trainlife.service;
 import io.nobukata.trainlife.dto.IntroduceRequest;
 import io.nobukata.trainlife.dto.UserDto;
 import io.nobukata.trainlife.entity.User;
+import io.nobukata.trainlife.exception.user.LongPersonnelNumberExistsException;
+import io.nobukata.trainlife.exception.user.NicknameAlreadyExistsException;
 import io.nobukata.trainlife.repository.*;
 import io.nobukata.trainlife.security.entity.Account;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,6 +36,14 @@ public class UserService {
     public void introduce(String username, IntroduceRequest req) {
         User user = userRepository.findByAccountUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Не найден пользователь: " + username));
+
+        if (userRepository.existsByNickname(req.nickname())) {
+            throw new NicknameAlreadyExistsException("Никнейм " + req.nickname() + " уже занят");
+        }
+
+        if (userRepository.existsByLongPersonnelNumber(req.longPersonnelNumber())) {
+            throw new LongPersonnelNumberExistsException("Табельный номер " + req.longPersonnelNumber() + " уже занят в ЕКАСУТР");
+        }
 
         user.setNickname(req.nickname());
         user.setFullName(req.fullName());

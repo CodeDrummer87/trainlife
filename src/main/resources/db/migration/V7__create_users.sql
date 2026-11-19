@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
     position_id BIGINT,
     number_of_column INT,
     personnel_number INT,
-    long_personnel_number INT,
+    long_personnel_number INT UNIQUE,
     traction_kind_id BIGINT,
     service_type_id BIGINT,
     locomotive_depot_id BIGINT,
