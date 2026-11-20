@@ -20,7 +20,8 @@ public class LocomotiveDepotService {
         return locomotiveDepotRepository.findByRailwayIdAndIsActiveTrue(railwayId).stream()
                 .map(d -> new LocomotiveDepotAbbreviateDto(
                         d.getId(),
-                        d.getShortTitle()
+                        d.getShortTitle(),
+                        d.getRailway().getId()
                 ))
                 .toList();
     }
@@ -29,7 +30,8 @@ public class LocomotiveDepotService {
         return locomotiveDepotRepository.findAllOrderByShortTitle().stream()
                 .map(d -> new LocomotiveDepotAbbreviateDto(
                         d.getId(),
-                        d.getShortTitle()
+                        d.getShortTitle(),
+                        d.getRailway().getId()
                 ))
                 .toList();
     }

@@ -21,10 +21,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const locoNumber    = document.getElementById('locoNumber');
 
+    const railway = document.getElementById('railway');
+    const railwayArr = sessionStorage.getItem('railways') ?
+        JSON.parse(sessionStorage.getItem('railways')) : await loadRailways();
+    await renderRailways(railwayArr);
+
     const locoDepot     = document.getElementById('locoDepot');
     const locoDepotsArr = sessionStorage.getItem('locomotive-depots') ?
         JSON.parse(sessionStorage.getItem('locomotive-depots')) : await getAllLocomotiveDepots();
-    await renderLocomotiveDepots(locoDepotsArr);
+    await renderLocomotiveDepots(locoDepotsArr, 5);
 
     const locoShoes     = document.getElementById('locoShoes');
     const trainNumber   = document.getElementById('trainNumber');
@@ -104,6 +109,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     locoType.onchange = async () => {
         const id = locoType.value;
         await renderLocomotiveSeries(locoSeriesArr, id);
+    }
+
+    railway.onchange = async () => {
+        const id = railway.value;
+        await renderLocomotiveDepots(locoDepotsArr, id);
     }
 
     function createEmptyTrip() {
@@ -660,6 +670,41 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
     }
 
+    async function loadRailways() {
+        try {
+            const result = await fetch(URI + '/railways', {
+                headers: {'Accept': 'application/json'},
+                credentials: 'include'
+            });
+
+            if (!result) {
+                displayMessage(currentMessage, 'Ошибка загрузки списка железных дорог', false);
+                throw new Error(`HTTP: ${result.status}`);
+            }
+
+            const data = await result.json();
+            sessionStorage.setItem('railways', JSON.stringify(data));
+            return data;
+        } catch (err) {
+            displayMessage(currentMessage, 'Не удалось загрузить список железных дорог', false);
+            railway.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
+            railway.disabled = true;
+        }
+    }
+
+    async function renderRailways(data) {
+        railway.replaceChildren();
+        const placeholder = createDefaultOption('железная дорога');
+        railway.appendChild(placeholder);
+
+        data
+            .slice()
+            .forEach(t => {
+                const opt = createOption(t.id, `${t.abbreviation}`);
+                railway.appendChild(opt);
+            });
+    }
+
     async function getAllLocomotiveDepots() {
         try {
             const result = await fetch(URI + '/locomotive-depots', {
@@ -682,15 +727,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    async function renderLocomotiveDepots(data) {
+    async function renderLocomotiveDepots(data, id) {
         locoDepot.replaceChildren();
         const placeholder = createDefaultOption('выберите депо приписки');
         locoDepot.appendChild(placeholder);
 
         data
             .slice()
-            .forEach(t => {
-                const opt = createOption(t.id, `${t.shortTitle}`);
+            .filter(d => d.railwayId == id)
+            .forEach(d => {
+                const opt = createOption(d.id, `${d.shortTitle}`);
                 locoDepot.appendChild(opt);
             });
     }

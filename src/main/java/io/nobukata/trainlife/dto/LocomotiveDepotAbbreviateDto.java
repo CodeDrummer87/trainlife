@@ -2,5 +2,6 @@ package io.nobukata.trainlife.dto;
 
 public record LocomotiveDepotAbbreviateDto(
         Long id,
-        String shortTitle
+        String shortTitle,
+        Long railwayId
 ) {}
