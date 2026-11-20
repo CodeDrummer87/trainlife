@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const currentMessage = document.getElementById('currentMessage');
+    const currentMessage= document.getElementById('currentMessage');
 
     const reportDate    = document.getElementById('reportDate');
     setCurrentDate(reportDate);
@@ -10,29 +10,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     const trainTypeSel  = document.getElementById('trainType');
 
     const locoType      = document.getElementById('locoType');
-    const locoTypeArr = sessionStorage.getItem('locomotive-types') ?
+    const locoTypeArr  = sessionStorage.getItem('locomotive-types') ?
         JSON.parse(sessionStorage.getItem('locomotive-types')) : await getAllLocomotiveTypes();
     await renderLocomotiveTypes(locoTypeArr);
 
     const locoSeries    = document.getElementById('locoSeries');
-    const locoSeriesArr = sessionStorage.getItem('locomotive-series') ?
+    const locoSeriesArr= sessionStorage.getItem('locomotive-series') ?
         JSON.parse(sessionStorage.getItem('locomotive-series')) : await getAllLocomotiveSeries();
     await renderLocomotiveSeries(locoSeriesArr, 1);
 
     const locoNumber    = document.getElementById('locoNumber');
 
-    const railway = document.getElementById('railway');
-    const railwayArr = sessionStorage.getItem('railways') ?
+    const railway       = document.getElementById('railway');
+    const railwayArr   = sessionStorage.getItem('railways') ?
         JSON.parse(sessionStorage.getItem('railways')) : await loadRailways();
     await renderRailways(railwayArr);
 
     const locoDepot     = document.getElementById('locoDepot');
-    const locoDepotsArr = sessionStorage.getItem('locomotive-depots') ?
+    const locoDepotsArr= sessionStorage.getItem('locomotive-depots') ?
         JSON.parse(sessionStorage.getItem('locomotive-depots')) : await getAllLocomotiveDepots();
     await renderLocomotiveDepots(locoDepotsArr, 5);
 
     const locoShoes     = document.getElementById('locoShoes');
     const trainNumber   = document.getElementById('trainNumber');
+    const trainWeight   = document.getElementById('trainWeight');
+    const trainAxles    = document.getElementById('trainAxles');
+    const trainLength   = document.getElementById('trainLength');
+    const trainTailCarNumber= document.getElementById('trainTailCarNumber');
+    const trainSecuring = document.getElementById('trainSecuring');
     const depStation    = document.getElementById('depStation');
     const depTime       = document.getElementById('depTime');
     const depSignal     = document.getElementById('depSignal');
@@ -114,6 +119,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     railway.onchange = async () => {
         const id = railway.value;
         await renderLocomotiveDepots(locoDepotsArr, id);
+    }
+
+    trainNumber.onkeydown = (e) => {
+        inputDigits(e, trainNumber, 4, function() {
+            trainWeight.focus();
+        });
+    }
+
+    trainWeight.onkeydown = (e) => {
+        inputDigits(e, trainWeight, 4, () => {
+           trainAxles.focus();
+        });
+    }
+
+    trainAxles.onkeydown = (e) => {
+        inputDigits(e, trainAxles, 3, () => {
+            trainLength.focus();
+        });
+    }
+
+    trainLength.onkeydown = (e) => {
+        inputDigits(e, trainLength, 2, () => {
+            trainTailCarNumber.focus();
+        })
+    }
+
+    trainTailCarNumber.onkeydown = (e) => {
+        inputDigits(e, trainTailCarNumber, 8, () => {
+            trainSecuring.focus();
+        })
     }
 
     function createEmptyTrip() {
@@ -271,11 +306,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (type === 'TRAIN') {
                 currentTrip.train = {
                     number: trainNumber.value.trim(),
-                    weight: document.getElementById('trainWeight').value.trim(),
-                    axles:  document.getElementById('trainAxles').value.trim(),
-                    length: document.getElementById('trainLength').value.trim(),
-                    tailCarNumber:     document.getElementById('trainTailCarNumber').value.trim(),
-                    securing:    document.getElementById('trainSecuring').value.trim(),
+                    weight: trainWeight.value.trim(),
+                    axles:  trainAxles.value.trim(),
+                    length: trainLength.value.trim(),
+                    tailCarNumber: trainTailCarNumber.value.trim(),
+                    securing: trainSecuring.value.trim(),
                 };
             } else if (type === 'DIT') {
                 currentTrip.dit = {
