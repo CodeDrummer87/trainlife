@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     trainLength.onkeydown = (e) => {
-        inputDigits(e, trainLength, 2, () => {
+        inputDigits(e, trainLength , 2, () => {
             trainTailCarNumber.focus();
         })
     }
@@ -149,6 +149,45 @@ document.addEventListener('DOMContentLoaded', async () => {
         inputDigits(e, trainTailCarNumber, 8, () => {
             trainSecuring.focus();
         })
+    }
+
+    trainSecuring.oninput = (e) => {
+        let v = e.target.value;
+
+        v = v.replace(/[^\d-]/g, '');   //.:: только цифры и дефис
+        v = v.replace(/-/g, '');        //.:: убирает лишние дефисы
+        if (v.length > 2) {
+            v = v.slice(0, 2) + '-' + v.slice(2);
+        }
+
+        const dashIndex = v.indexOf('-');
+        if (dashIndex !== -1) {
+            let first = v.slice(0, dashIndex);
+            let second = v.slice(dashIndex + 1);
+
+            if (first.length > 0 && Number(first) > 32) {
+                first = '32';
+            }
+            if (first === '') {
+                first = '';
+                second = '';
+            }
+
+            if (second.length > 1) {
+                second = second.slice(0, 1);
+            }
+            if (second !== '' && Number(second) > 9) {
+                second = '9';
+            }
+
+            v = second === '' && first === '' ? '' : (second === '' ? first : first + '-' + second);
+        } else {
+            if (v.length > 0 && Number(v) > 32) {
+                v = '32';
+            }
+        }
+
+        e.target.value = v;
     }
 
     function createEmptyTrip() {
