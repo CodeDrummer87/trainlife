@@ -127,7 +127,8 @@
                             </div>
                             <div class="field">
                                 <label for="locoShoes">Количество тормозных башмаков на борту</label>
-                                <input type="text" id="locoShoes" inputmode="numeric" placeholder="Например, 4" required>
+                                <input type="text" id="locoShoes" inputmode="numeric"
+                                       placeholder="кол-во ТБ - (минус) кол-во неисправных ТБ" required>
                             </div>
                         </div>
                         <div class="actions">
@@ -149,7 +150,8 @@
                                 </div>
                                 <div class="field-row">
                                     <div class="field">
-                                        <label for="trainWeight">Вес поезда</label>
+                                        <label for="trainWeight">Вес
+                                            <span id="cargo" class="color-span">гружёного</span> поезда</label>
                                         <input type="text" id="trainWeight" inputmode="numeric" required>
                                     </div>
                                     <div class="field">
@@ -168,9 +170,9 @@
                                     </div>
                                 </div>
                                 <div class="field">
-                                    <label for="trainSecuring">Закрепление (тормозными башмаками)</label>
-                                    <input type="text" id="trainSecuring"
-                                           placeholder="кол-во ТБ - (минус) кол-во неисправных ТБ" required>
+                                    <label for="trainSecuring">Закрепление состава
+                                        <span id="carBraking" class="color-span">нераздельное</span> торможение</label>
+                                    <input type="text" id="trainSecuring" placeholder="Авторасчёт (доступно редактирование)" required>
                                 </div>
                             </div>
 

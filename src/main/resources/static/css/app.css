@@ -368,3 +368,7 @@ nav button {
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+.color-span {
+    color: #daab0f;
+}

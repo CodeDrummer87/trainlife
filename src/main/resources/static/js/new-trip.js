@@ -37,6 +37,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const trainAxles    = document.getElementById('trainAxles');
     const trainLength   = document.getElementById('trainLength');
     const trainTailCarNumber= document.getElementById('trainTailCarNumber');
+    const cargo         = document.getElementById('cargo');
+    const carBraking    = document.getElementById('carBraking');
     const trainSecuring = document.getElementById('trainSecuring');
     const depStation    = document.getElementById('depStation');
     const depTime       = document.getElementById('depTime');
@@ -170,6 +172,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     trainWeight.onkeydown = (e) => {
         inputDigits(e, trainWeight, 4, () => {
            trainAxles.focus();
+           evaluateTrainSecuring();
         });
     }
 
@@ -189,6 +192,41 @@ document.addEventListener('DOMContentLoaded', async () => {
         inputDigits(e, trainTailCarNumber, 8, () => {
             trainSecuring.focus();
         })
+    }
+
+    cargo.onclick = () => {
+        cargo.innerText = cargo.innerText === 'ГРУЖЁНОГО' ? 'ПОРОЖНЕГО' : 'ГРУЖЁНОГО';
+        evaluateTrainSecuring();
+    }
+    trainWeight.onblur = () => {
+        evaluateTrainSecuring();
+    }
+
+    carBraking.onclick = () => {
+        carBraking.innerText = carBraking.innerText === 'НЕРАЗДЕЛЬНОЕ' ? 'РАЗДЕЛЬНОЕ' : 'НЕРАЗДЕЛЬНОЕ';
+        evaluateTrainSecuring();
+    }
+
+    trainSecuring.onkeydown = (e) => {
+        const allowed = ['0','1','2','3','4','5','6','7','8','9',
+            'Enter', 'ArrowLeft', 'ArrowRight', 'Backspace', 'Т', 'Б', 'Р', '-', ];
+        if (!allowed.includes(e.key)) {
+            e.preventDefault();
+        }
+        function checkChar(char) {
+            const l = trainSecuring.value.length;
+            const unrepeatableAllowed = ['Б', 'Т', 'Р'];
+            if (e.key === char && (trainSecuring.value[l - 1] === char
+            || unrepeatableAllowed.includes(trainSecuring.value[l - 2]))) {
+                e.preventDefault();
+            }
+        }
+        checkChar('Б');
+        checkChar('Т');
+        checkChar('Р');
+        if (e.key === '-' && trainSecuring.value.includes('-')) {
+            e.preventDefault();
+        }
     }
 
     function createEmptyTrip() {
@@ -814,5 +852,25 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const opt = createOption(d.id, `${d.shortTitle}`);
                 locoDepot.appendChild(opt);
             });
+    }
+
+    async function evaluateTrainSecuring() {
+        const cargoRatio = cargo.innerText === 'ГРУЖЁНОГО' ? 0.3 : 0.8;
+        const carBrakingRatio = carBraking.innerText === 'НЕРАЗДЕЛЬНОЕ' ? 4 : 2;
+
+        const locoShoesData = locoShoes.value.split('-');
+        const numberOfLocoShoes = locoShoesData.length > 1 ?
+            Number(locoShoesData[0]) - Number(locoShoesData[1]) : locoShoesData[0];
+        const weightByBrakeShoes = Number(numberOfLocoShoes) * 100 / cargoRatio;
+
+        let numberOfHandBrakes;
+        if (weightByBrakeShoes > Number(trainWeight.value)) {
+            const ratio = cargoRatio === 0.3 ? 333.333 : 125;
+            const locoShoesRequired = Math.ceil((trainWeight.value) / ratio);
+            trainSecuring.value  = `${locoShoesRequired}ТБ`;
+        } else {
+            numberOfHandBrakes = (Number(trainWeight.value) - weightByBrakeShoes) * 0.8 / 100 / carBrakingRatio;
+            trainSecuring.value = `${numberOfLocoShoes}ТБ - ${Math.ceil(numberOfHandBrakes)}РТ`;
+        }
     }
 });
