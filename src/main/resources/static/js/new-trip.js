@@ -101,11 +101,51 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    locoShoes.onkeydown = function(e) {
-        inputDigits(e, locoShoes, 2, function() {
-            trainNumber.focus();
-        });
-    }
+    locoShoes.oninput = (e) => {
+        let v = e.target.value;
+
+        v = v.replace(/[^\d-]/g, '');
+        const userDash = v.indexOf('-');
+        let first, second;
+        if (userDash !== -1) {
+            first = v.slice(0, userDash).replace(/-/g, '');
+            second = v.slice(userDash + 1).replace(/-/g, '');
+        } else {
+            let digits = v.replace(/-/g, '');
+            if (digits.length > 2) {
+                first = digits.slice(0, 2);
+                second = digits.slice(2);
+            } else {
+                first = digits;
+                second = '';
+            }
+        }
+
+        first = first.replace(/^0+/, '');
+        if (first.length > 0 && Number(first) > 32) {
+            first = '32';
+        }
+        if (second.length > 1) {
+            second = second.slice(0, 1);
+        }
+        if (second !== '' && Number(second) > 9) {
+            second = '9';
+        }
+        if (first !== '' && second !== '' && Number(second) >= Number(first)) {
+            second = String(Math.max(0, Number(first) - 1));
+        }
+        if (first === '') {
+            v = '';
+        } else if (second === '' && userDash === -1 && first.length <= 2) {
+            v = first;
+        } else if (second === '') {
+            v = first + '-';
+        } else {
+            v = first + '-' + second;
+        }
+
+        e.target.value = v;
+    };
 
     document.getElementById('accountButton').onclick = () => {
         window.location.href = '/account';
@@ -149,45 +189,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         inputDigits(e, trainTailCarNumber, 8, () => {
             trainSecuring.focus();
         })
-    }
-
-    trainSecuring.oninput = (e) => {
-        let v = e.target.value;
-
-        v = v.replace(/[^\d-]/g, '');   //.:: только цифры и дефис
-        v = v.replace(/-/g, '');        //.:: убирает лишние дефисы
-        if (v.length > 2) {
-            v = v.slice(0, 2) + '-' + v.slice(2);
-        }
-
-        const dashIndex = v.indexOf('-');
-        if (dashIndex !== -1) {
-            let first = v.slice(0, dashIndex);
-            let second = v.slice(dashIndex + 1);
-
-            if (first.length > 0 && Number(first) > 32) {
-                first = '32';
-            }
-            if (first === '') {
-                first = '';
-                second = '';
-            }
-
-            if (second.length > 1) {
-                second = second.slice(0, 1);
-            }
-            if (second !== '' && Number(second) > 9) {
-                second = '9';
-            }
-
-            v = second === '' && first === '' ? '' : (second === '' ? first : first + '-' + second);
-        } else {
-            if (v.length > 0 && Number(v) > 32) {
-                v = '32';
-            }
-        }
-
-        e.target.value = v;
     }
 
     function createEmptyTrip() {
