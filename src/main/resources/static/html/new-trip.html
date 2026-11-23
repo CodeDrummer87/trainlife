@@ -56,11 +56,19 @@
                                 <label for="reportTime">Время явки</label>
                                 <input type="time" id="reportTime" required>
                             </div>
-                            <div class="field">
-                                <label for="reportPoint">Пункт явки</label>
-                                <select id="reportPoint" required>
-                                    <option value="" disabled selected>Загрузка…</option>
-                                </select>
+                            <div class="field-row">
+                                <div class="field">
+                                    <label for="reportRailway">Железная дорога</label>
+                                    <select id="reportRailway" required>
+                                        <option value="" disabled selected>Загрузка...</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label for="reportPoint">Пункт явки</label>
+                                    <select id="reportPoint" required>
+                                        <option value="" disabled selected>Загрузка…</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="actions">
@@ -296,8 +304,8 @@
                             <h2>Заметки на полях</h2>
                             <p class="hint">Сведения о пассажирах, приказы, отмены и прочее</p>
                             <div class="field">
-                                <label for="notes">Заметки</label>
-                                <textarea id="notes" rows="6" placeholder="Важные и любопытные сведения и примечания…"></textarea>
+                                <label for="notes">Заметки на полях</label>
+                                <textarea id="notes" rows="6" placeholder="Важные и любопытные сведения, разные примечания…"></textarea>
                             </div>
                         </div>
                         <div class="actions">

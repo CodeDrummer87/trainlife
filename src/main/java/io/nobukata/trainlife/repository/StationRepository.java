@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface StationRepository extends JpaRepository<Station, Long> {
 
-    List<Station> findAllByHasTurnoutPointIsTrue();
-    List<Station> findAllByRailwayId(Long id);
+    List<Station> findALLByRailwayIdAndHasTurnoutPointIsTrueOrderByTitleAsc(Long id);
+    List<Station> findAllByRailwayIdOrderByTitleAsc(Long id);
 }

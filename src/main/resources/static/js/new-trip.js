@@ -1,75 +1,24 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const currentMessage= document.getElementById('currentMessage');
+    const railwayArr   = sessionStorage.getItem('railways') ?
+        JSON.parse(sessionStorage.getItem('railways')) : await loadRailways();
 
+//region .:: R E P O R T :::
     const reportDate    = document.getElementById('reportDate');
     setCurrentDate(reportDate);
 
     const reportTime    = document.getElementById('reportTime');
+    const reportRailway = document.getElementById('reportRailway');
+
+    await renderRailways(railwayArr, reportRailway);
+    reportRailway.value = sessionStorage.getItem('railwayId') ? sessionStorage.getItem('railwayId') : 5;
+    reportRailway.onchange = async () => {
+        const railwayId = reportRailway.value;
+        await getStationsWithTurnoutPoint(railwayId);
+    }
+
     const reportPoint   = document.getElementById('reportPoint');
-    await getStationsWithTurnoutPoint();
-    const trainTypeSel  = document.getElementById('trainType');
-
-    const locoType      = document.getElementById('locoType');
-    const locoTypeArr  = sessionStorage.getItem('locomotive-types') ?
-        JSON.parse(sessionStorage.getItem('locomotive-types')) : await getAllLocomotiveTypes();
-    await renderLocomotiveTypes(locoTypeArr);
-
-    const locoSeries    = document.getElementById('locoSeries');
-    const locoSeriesArr= sessionStorage.getItem('locomotive-series') ?
-        JSON.parse(sessionStorage.getItem('locomotive-series')) : await getAllLocomotiveSeries();
-    await renderLocomotiveSeries(locoSeriesArr, 1);
-
-    const locoNumber    = document.getElementById('locoNumber');
-
-    const railway       = document.getElementById('railway');
-    const railwayArr   = sessionStorage.getItem('railways') ?
-        JSON.parse(sessionStorage.getItem('railways')) : await loadRailways();
-    await renderRailways(railwayArr, railway);
-    railway.value = sessionStorage.getItem('railwayId') ? sessionStorage.getItem('railwayId') : 5;
-
-    const locoDepot     = document.getElementById('locoDepot');
-    const locoDepotsArr= sessionStorage.getItem('locomotive-depots') ?
-        JSON.parse(sessionStorage.getItem('locomotive-depots')) : await getAllLocomotiveDepots();
-    await renderLocomotiveDepots(locoDepotsArr, 5);
-
-    const locoShoes     = document.getElementById('locoShoes');
-    const trainNumber   = document.getElementById('trainNumber');
-    const trainWeight   = document.getElementById('trainWeight');
-    const trainAxles    = document.getElementById('trainAxles');
-    const trainLength   = document.getElementById('trainLength');
-    const trainTailCarNumber= document.getElementById('trainTailCarNumber');
-    const cargo         = document.getElementById('cargo');
-    const carBraking    = document.getElementById('carBraking');
-    const trainSecuring = document.getElementById('trainSecuring');
-
-    const depRailway    = document.getElementById('depRailway');
-    await renderRailways(railwayArr, depRailway);
-    depRailway.value = sessionStorage.getItem('railwayId') ? sessionStorage.getItem('railwayId') : 5;
-    const depStation    = document.getElementById('depStation');
-    await renderStations(depStation, await getStationsByRailway(depRailway.value));
-
-    const depTime       = document.getElementById('depTime');
-    const depSignal     = document.getElementById('depSignal');
-    const arrStation    = document.getElementById('arrStation');
-    const arrTime       = document.getElementById('arrTime');
-    const arrSignal     = document.getElementById('arrSignal');
-    const handoverTime  = document.getElementById('handoverTime');
-    const form4Title    = document.getElementById('form4Title');
-    const form4Hint     = document.getElementById('form4Hint');
-    const form6Hint     = document.getElementById('form6Hint');
-    const ditList       = document.getElementById('ditList');
-    const brakeTestList = document.getElementById('brakeTestList');
-    const passList      = document.getElementById('passList');
-    const stopList      = document.getElementById('stopList');
-    const addPassBtn    = document.getElementById('addPassBtn');
-    const addStopBtn    = document.getElementById('addStopBtn');
-    const addLocoBtn    = document.getElementById('addLocoBtn');
-    const addBrakeBtn   = document.getElementById('addBrakeBtn');
-    const notes         = document.getElementById('notes');
-
-    renderProfile(await loadProfile());
-    await mountUserReminder();
-    await initNewTrip();
+    await getStationsWithTurnoutPoint(sessionStorage.getItem('railwayId') ? sessionStorage.getItem('railwayId') : 5);
 
     function setCurrentDate(reportDate) {
         const today = new Date();
@@ -103,6 +52,39 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         reportTime.focus();
     }
+
+//endregion
+
+//region .:: T R A I N   T Y P E :::
+
+    const trainTypeSel  = document.getElementById('trainType');
+
+//endregion
+
+//region .:: L O C O M O T I V E :::
+
+    const locoType      = document.getElementById('locoType');
+    const locoTypeArr  = sessionStorage.getItem('locomotive-types') ?
+        JSON.parse(sessionStorage.getItem('locomotive-types')) : await getAllLocomotiveTypes();
+    await renderLocomotiveTypes(locoTypeArr);
+
+    const locoSeries    = document.getElementById('locoSeries');
+    const locoSeriesArr= sessionStorage.getItem('locomotive-series') ?
+        JSON.parse(sessionStorage.getItem('locomotive-series')) : await getAllLocomotiveSeries();
+    await renderLocomotiveSeries(locoSeriesArr, 1);
+
+    const locoNumber    = document.getElementById('locoNumber');
+
+    const railway       = document.getElementById('railway');
+    await renderRailways(railwayArr, railway);
+    railway.value = sessionStorage.getItem('railwayId') ? sessionStorage.getItem('railwayId') : 5;
+
+    const locoDepot     = document.getElementById('locoDepot');
+    const locoDepotsArr= sessionStorage.getItem('locomotive-depots') ?
+        JSON.parse(sessionStorage.getItem('locomotive-depots')) : await getAllLocomotiveDepots();
+    await renderLocomotiveDepots(locoDepotsArr, 5);
+
+    const locoShoes     = document.getElementById('locoShoes');
 
     locoNumber.onkeydown = function(e) {
         inputDigits(e, locoNumber, 4, function() {
@@ -156,10 +138,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         e.target.value = v;
     };
 
-    document.getElementById('accountButton').onclick = () => {
-        window.location.href = '/account';
-    }
-
     locoType.onchange = async () => {
         const id = locoType.value;
         await renderLocomotiveSeries(locoSeriesArr, id);
@@ -170,6 +148,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         await renderLocomotiveDepots(locoDepotsArr, id);
     }
 
+//endregion
+
+//region .:: T R A I N   D A T A :::
+
+    const trainNumber   = document.getElementById('trainNumber');
+    const trainWeight   = document.getElementById('trainWeight');
+    const trainAxles    = document.getElementById('trainAxles');
+    const trainLength   = document.getElementById('trainLength');
+    const trainTailCarNumber= document.getElementById('trainTailCarNumber');
+    const cargo         = document.getElementById('cargo');
+    const carBraking    = document.getElementById('carBraking');
+    const trainSecuring = document.getElementById('trainSecuring');
+
     trainNumber.onkeydown = (e) => {
         inputDigits(e, trainNumber, 4, function() {
             trainWeight.focus();
@@ -178,8 +169,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     trainWeight.onkeydown = (e) => {
         inputDigits(e, trainWeight, 4, () => {
-           trainAxles.focus();
-           evaluateTrainSecuring();
+            trainAxles.focus();
+            evaluateTrainSecuring();
         });
     }
 
@@ -224,7 +215,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const l = trainSecuring.value.length;
             const unrepeatableAllowed = ['Б', 'Т', 'Р'];
             if (e.key === char && (trainSecuring.value[l - 1] === char
-            || unrepeatableAllowed.includes(trainSecuring.value[l - 2]))) {
+                || unrepeatableAllowed.includes(trainSecuring.value[l - 2]))) {
                 e.preventDefault();
             }
         }
@@ -236,11 +227,49 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+//endregion
+
+//region .:: D E P A R T U R E :::
+    const depRailway    = document.getElementById('depRailway');
+    await renderRailways(railwayArr, depRailway);
+    depRailway.value = sessionStorage.getItem('railwayId') ? sessionStorage.getItem('railwayId') : 5;
+    const depStation    = document.getElementById('depStation');
+    await renderStations(depStation, await getStationsByRailway(depRailway.value));
+
+    const depTime       = document.getElementById('depTime');
+    const depSignal     = document.getElementById('depSignal');
+
     depRailway.onchange = async () => {
         const data = await getStationsByRailway(depRailway.value);
         await renderStations(depStation, data);
     }
 
+//endregion
+
+    const arrStation    = document.getElementById('arrStation');
+    const arrTime       = document.getElementById('arrTime');
+    const arrSignal     = document.getElementById('arrSignal');
+    const handoverTime  = document.getElementById('handoverTime');
+    const form4Title    = document.getElementById('form4Title');
+    const form4Hint     = document.getElementById('form4Hint');
+    const form6Hint     = document.getElementById('form6Hint');
+    const ditList       = document.getElementById('ditList');
+    const brakeTestList = document.getElementById('brakeTestList');
+    const passList      = document.getElementById('passList');
+    const stopList      = document.getElementById('stopList');
+    const addPassBtn    = document.getElementById('addPassBtn');
+    const addStopBtn    = document.getElementById('addStopBtn');
+    const addLocoBtn    = document.getElementById('addLocoBtn');
+    const addBrakeBtn   = document.getElementById('addBrakeBtn');
+    const notes         = document.getElementById('notes');
+
+    renderProfile(await loadProfile());
+    await mountUserReminder();
+    await initNewTrip();
+
+    document.getElementById('accountButton').onclick = () => {
+        window.location.href = '/account';
+    }
 
     function createEmptyTrip() {
         return {
@@ -691,9 +720,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         checkComplete();
     }
 
-    async function getStationsWithTurnoutPoint() {
+    async function getStationsWithTurnoutPoint(railwayId) {
         try {
-            const result = await fetch(URI + "/stations/with-turnout-point", {
+            const result = await fetch(URI + `/stations/railway/${railwayId}/with-turnout-point`, {
                 headers: {'Accept': 'application/json'},
                 credentials: 'include'
             });
@@ -805,7 +834,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 credentials: 'include'
             });
 
-            if (!result) {
+            if (!result.ok) {
                 displayMessage(currentMessage, 'Ошибка загрузки списка железных дорог', false);
                 throw new Error(`HTTP: ${result.status}`);
             }

@@ -3,12 +3,11 @@ package io.nobukata.trainlife.service;
 import io.nobukata.trainlife.dto.StationDto;
 import io.nobukata.trainlife.repository.StationRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-//.:: OSIV [spring:jpa:open-in-view = true (сессия открыта до конца выполнения HTTP-запроса)]
+//.:: OSIV [spring:jpa:open-in-view = true (Default) (the session is open before ending of HTTP-request)]
 public class StationService {
 
     private final StationRepository stationRepository;
@@ -17,8 +16,8 @@ public class StationService {
         this.stationRepository = stationRepository;
     }
 
-    public List<StationDto> getStationsByHasTurnoutPointIsTrue() {
-        return stationRepository.findAllByHasTurnoutPointIsTrue().stream()
+    public List<StationDto> getStationsByHasTurnoutPointIsTrue(Long railwayId) {
+        return stationRepository.findALLByRailwayIdAndHasTurnoutPointIsTrueOrderByTitleAsc(railwayId).stream()
                 .map(s -> new StationDto(
                         s.getId(),
                         s.getTitle(),
@@ -31,7 +30,7 @@ public class StationService {
     }
 
     public List<StationDto> getAllStationsByRailwayId(Long railwayId) {
-        return stationRepository.findAllByRailwayId(railwayId).stream()
+        return stationRepository.findAllByRailwayIdOrderByTitleAsc(railwayId).stream()
                 .map(s -> new StationDto(
                         s.getId(),
                         s.getTitle(),
