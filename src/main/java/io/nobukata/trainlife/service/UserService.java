@@ -81,6 +81,7 @@ public class UserService {
                 user.getTractionKind().getTitle(),
                 user.getServiceType().getTitle(),
                 user.getLocomotiveDepot().getShortTitle(),
+                user.getLocomotiveDepot().getRailway().getId(),
                 user.getLocomotiveDepot().getRailway().getFullTitle(),
                 user.getLocomotiveDepot().getRailway().getAbbreviation()
         );

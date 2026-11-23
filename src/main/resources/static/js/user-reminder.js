@@ -69,6 +69,7 @@ function renderReminder(user) {
 
     if (!reminderTab) return;
 
+    sessionStorage.setItem('railwayId', user.railwayId);
     reminderTab.innerText = `.:: ${user.locomotiveDepotAbbreviation.replace('-', '★')} (${user.railwayAbbreviation})`;
     railway_full_title.innerText = user.railwayFullTitle;
 

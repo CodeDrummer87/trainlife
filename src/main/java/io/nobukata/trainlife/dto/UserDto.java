@@ -13,6 +13,7 @@ public record UserDto(
         String tractionKindTitle,
         String serviceTypeTitle,
         String locomotiveDepotAbbreviation,
+        Long railwayId,
         String railwayFullTitle,
         String railwayAbbreviation
 ) {}

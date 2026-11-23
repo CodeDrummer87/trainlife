@@ -206,14 +206,19 @@
                         <div class="form-body">
                             <h2>Отправление</h2>
                             <p class="hint">Станция и время отправления, литера сигнала</p>
-                            <div class="field">
-                                <label for="depStation">Станция отправления</label>
-                                <select id="depStation" required>
-                                    <option value="" disabled selected>— выберите станцию —</option>
-                                    <option value="1">Станция 1</option>
-                                    <option value="2">Станция 2</option>
-                                    <option value="3">Станция 3</option>
-                                </select>
+                            <div class="field-row">
+                                <div class="field">
+                                    <label for="depRailway">Железная дорога</label>
+                                    <select id="depRailway" required>
+                                        <option value="" disabled selected>Загрузка…</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label for="depStation">Станция отправления</label>
+                                    <select id="depStation" required>
+                                        <option value="" disabled selected>Загрузка…</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="field-row">
                                 <div class="field">
