@@ -1,7 +1,9 @@
 package io.nobukata.trainlife.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "train_mode_traffic_lights")
 public class TrafficLight {

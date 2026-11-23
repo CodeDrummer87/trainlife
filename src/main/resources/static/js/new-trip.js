@@ -244,6 +244,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         await renderStations(depStation, data);
     }
 
+    depStation.onchange = async () => {
+        const data = await getTrafficLightsByStation(depStation.value);
+        await renderTrafficLights(depSignal, data, trainNumber.value);
+    }
+
 //endregion
 
     const arrStation    = document.getElementById('arrStation');
@@ -936,5 +941,38 @@ document.addEventListener('DOMContentLoaded', async () => {
             reportPoint.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
             reportPoint.disabled = true;
         }
+    }
+
+    async function getTrafficLightsByStation(stationId) {
+        try {
+            const result = await fetch(URI + `/traffic-lights/station/${stationId}`, {
+                headers: {'Accept': 'application/json'},
+                credentials: 'include'
+            });
+
+            if (!result.ok) {
+                displayMessage(currentMessage, 'Ошибка загрузки списка сигналов выбранной станции', false);
+                throw new Error(`HTTP ${result.status}`);
+            }
+
+            return await result.json();
+        } catch (err) {
+            displayMessage(currentMessage, 'Не удалось загрузить список сигналов выбранной станции', false);
+        }
+    }
+
+    async function renderTrafficLights(select, data, trainNumber) {
+        select.replaceChildren();
+        const placeholder = createDefaultOption(data.length === 0 ? 'список пуст' : 'список сигналов');
+        select.appendChild(placeholder);
+        if (data.length === 0) return;
+
+        data
+            .slice()
+            .filter(r => Number(trainNumber) % 2 === 0 ? r.isEvenDirection : !r.isEvenDirection)
+            .forEach(r => {
+                const opt = createOption(r.id, `${r.title}`);
+                select.appendChild(opt);
+            });
     }
 });
