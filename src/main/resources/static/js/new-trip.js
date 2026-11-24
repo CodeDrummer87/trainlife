@@ -525,19 +525,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         addBrakeBtn.addEventListener('click', () => brakeTestList.appendChild(makeBrakeRow()));
 
 
-        function makePassRow(station = '', time = '') {
+        async function makePassRow(station = '', time = '') {
             const row = document.createElement('div');
             row.className = 'dynamic-row';
 
+            const rlw = document.createElement('select');
+            rlw.required = true;
+            rlw.innerHTML = `<option value="" disabled ${station ? '' : 'selected'}>⤷ дороги</option>`;
+            await renderRailways(railwayArr, rlw);
+            rlw.value = sessionStorage.getItem('railwayId');
+
             const sel = document.createElement('select');
             sel.required = true;
-            sel.innerHTML = `
-            <option value="" disabled ${station ? '' : 'selected'}>— станция —</option>
-            <option value="1" ${station === '1' ? 'selected' : ''}>Станция 1</option>
-            <option value="2" ${station === '2' ? 'selected' : ''}>Станция 2</option>
-            <option value="3" ${station === '3' ? 'selected' : ''}>Станция 3</option>
-            <option value="4" ${station === '4' ? 'selected' : ''}>Станция 4</option>
-        `;
+            await renderStations(sel, await getStationsByRailway(rlw.value));
+            rlw.onchange = async () => {await renderStations(sel, await getStationsByRailway(rlw.value))}
 
             const inp = document.createElement('input');
             inp.type = 'time';
@@ -546,10 +547,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const removeButton = createRemoveButton(row, checkComplete);
 
-            row.append(sel, inp, removeButton);
+            row.append(rlw, sel, inp, removeButton);
             return row;
         }
-        addPassBtn.addEventListener('click', () => passList.appendChild(makePassRow()));
+        addPassBtn.addEventListener('click', async () => passList.appendChild(await makePassRow()));
 
         function makeStopRow(place = '') {
             const row = document.createElement('div');
@@ -722,7 +723,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function renderStations(select, data) {
         select.replaceChildren();
-        const placeholder = createDefaultOption(data.length === 0 ? 'список пуст' : '— выберите из списка —');
+        const placeholder = createDefaultOption(data.length === 0 ? 'список пуст' : '⤷ станции');
         select.appendChild(placeholder);
 
         if (data.length === 0) return;
@@ -759,8 +760,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function renderLocomotiveTypes(data) {
         locoType.replaceChildren();
-        const placeholder = createDefaultOption('тип лок-ва');
+        const placeholder = createDefaultOption(data.length === 0 ? 'список пуст' : '⤷ тип лок-ва');
         locoType.appendChild(placeholder);
+        if (data.length === 0) return;
 
         data
             .slice()
@@ -794,8 +796,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function renderLocomotiveSeries(data, id) {
         locoSeries.replaceChildren();
-        const placeholder = createDefaultOption('серия');
+        const placeholder = createDefaultOption(data.length === 0 ? 'список пуст' : '⤷ серия');
         locoSeries.appendChild(placeholder);
+        if (data.length === 0) return;
 
         data
             .slice()
@@ -830,8 +833,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function renderRailways(data, select) {
         select.replaceChildren();
-        const placeholder = createDefaultOption('железная дорога');
+        const placeholder = createDefaultOption(data.length === 0 ? 'список пуст' : '⤷ железная дорога');
         select.appendChild(placeholder);
+        if (data.length === 0) return;
 
         data
             .slice()
@@ -865,8 +869,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function renderLocomotiveDepots(data, id) {
         locoDepot.replaceChildren();
-        const placeholder = createDefaultOption('выберите депо приписки');
+        const placeholder = createDefaultOption(data.length === 0 ? 'список пуст' : '⤷ депо приписки');
         locoDepot.appendChild(placeholder);
+        if (data.length === 0) return;
 
         data
             .slice()

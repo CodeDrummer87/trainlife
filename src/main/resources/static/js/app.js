@@ -112,7 +112,7 @@ function createRemoveButton(div, func) {
     const rm = document.createElement('button');
     rm.type = 'button';
     rm.className = 'btn-remove';
-    rm.textContent = 'X';
+    rm.textContent = '❌';
     rm.title = 'Удалить';
     rm.onclick = () => { div.remove(); func() };
     return rm;
