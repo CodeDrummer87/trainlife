@@ -96,3 +96,14 @@ function inputDigits(event, field, numberOfDigits, func) {
         event.preventDefault();
     }
 }
+
+function inputTrafficLightLetter(e, input) {
+    const allowed = ['Backspace', 'Enter', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete',
+        '0','1','2','3','4','5','6','7','8','9',
+        'A','Б','В','Г','Д','З','И','К','М','Н','О','П','Т','У','Ч','О'];
+    if (!allowed.includes(e.key) || input.value.length > 6) {
+        if (e.key !== 'Backspace') {
+            e.preventDefault();
+        }
+    }
+}

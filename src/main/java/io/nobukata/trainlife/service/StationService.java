@@ -3,11 +3,12 @@ package io.nobukata.trainlife.service;
 import io.nobukata.trainlife.dto.StationDto;
 import io.nobukata.trainlife.repository.StationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-//.:: OSIV [spring:jpa:open-in-view = true (Default) (the session is open before ending of HTTP-request)]
+@Transactional
 public class StationService {
 
     private final StationRepository stationRepository;
