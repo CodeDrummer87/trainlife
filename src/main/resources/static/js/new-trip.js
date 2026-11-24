@@ -362,7 +362,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (step === 6 && currentTrip.trainType !== 'LER') {
                 const rows = Array.from(brakeTestList.querySelectorAll('.brake-row'));
                 if (rows.length === 0) return false;
-                return rows.every(r => r.querySelector('select').value);
+                return rows.every(r => r.querySelector('input').value);
             }
 
             const fields = form.querySelectorAll('input[required], select[required], textarea[required]');
@@ -402,7 +402,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     currentTrip.brakeTests = ['FIRST_REMOVAL'];
                 } else {
                     currentTrip.brakeTests = Array.from(brakeTestList.querySelectorAll('.brake-row'))
-                        .map(r => r.querySelector('select').value);
+                        .map(r => r.querySelector('input').value);
                 }
             } else if (currentStep === 7) {
                 currentTrip.passStations = Array.from(passList.querySelectorAll('.dynamic-row')).map(row => ({
@@ -502,39 +502,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             inp.required = true;
             inp.value = number;
 
-            const rm = document.createElement('button');
-            rm.type = 'button';
-            rm.className = 'btn-remove';
-            rm.textContent = 'X';
-            rm.title = 'Удалить';
-            rm.onclick = () => { row.remove(); checkComplete(); };
+            const removeButton = createRemoveButton(row, checkComplete);
 
-            row.append(sel, inp, rm);
+            row.append(sel, inp, removeButton);
             return row;
         }
         addLocoBtn.addEventListener('click', () => ditList.appendChild(makeLocoRow()));
 
-        function makeBrakeRow(peregon = '') {
+        function makeBrakeRow() {
             const row = document.createElement('div');
             row.className = 'dynamic-row brake-row';
 
-            const sel = document.createElement('select');
-            sel.required = true;
-            sel.innerHTML = `
-            <option value="" disabled ${peregon ? '' : 'selected'}>— перегон —</option>
-            <option value="1" ${peregon === '1' ? 'selected' : ''}>Перегон 1</option>
-            <option value="2" ${peregon === '2' ? 'selected' : ''}>Перегон 2</option>
-            <option value="3" ${peregon === '3' ? 'selected' : ''}>Перегон 3</option>
-        `;
+            const input = document.createElement('input');
+            input.required = true;
+            input.placeholder = '(V км/ч) Перегон << км.пк >>';
 
-            const rm = document.createElement('button');
-            rm.type = 'button';
-            rm.className = 'btn-remove';
-            rm.textContent = 'X';
-            rm.title = 'Удалить';
-            rm.onclick = () => { row.remove(); checkComplete(); };
+            const removeButton = createRemoveButton(row, checkComplete);
 
-            row.append(sel, rm);
+            row.append(input, removeButton);
             return row;
         }
         addBrakeBtn.addEventListener('click', () => brakeTestList.appendChild(makeBrakeRow()));
@@ -559,14 +544,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             inp.required = true;
             inp.value = time;
 
-            const rm = document.createElement('button');
-            rm.type = 'button';
-            rm.className = 'btn-remove';
-            rm.textContent = 'X';
-            rm.title = 'Удалить';
-            rm.onclick = () => { row.remove(); checkComplete(); };
+            const removeButton = createRemoveButton(row, checkComplete);
 
-            row.append(sel, inp, rm);
+            row.append(sel, inp, removeButton);
             return row;
         }
         addPassBtn.addEventListener('click', () => passList.appendChild(makePassRow()));
@@ -581,14 +561,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             inp.required = true;
             inp.value = place;
 
-            const rm = document.createElement('button');
-            rm.type = 'button';
-            rm.className = 'btn-remove';
-            rm.textContent = 'X';
-            rm.title = 'Удалить';
-            rm.onclick = () => { row.remove(); checkComplete(); };
+            const removeButton = createRemoveButton(row, checkComplete);
 
-            row.append(inp, rm);
+            row.append(inp, removeButton);
             return row;
         }
         addStopBtn.addEventListener('click', () => stopList.appendChild(makeStopRow()));
