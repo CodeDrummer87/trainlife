@@ -80,9 +80,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     railway.value = sessionStorage.getItem('railwayId') ? sessionStorage.getItem('railwayId') : 5;
 
     const locoDepot     = document.getElementById('locoDepot');
-    const locoDepotsArr= sessionStorage.getItem('locomotive-depots') ?
+    const locoDepotArr= sessionStorage.getItem('locomotive-depots') ?
         JSON.parse(sessionStorage.getItem('locomotive-depots')) : await getAllLocomotiveDepots();
-    await renderLocomotiveDepots(locoDepotsArr, 5);
+    await renderLocomotiveDepots(locoDepotArr, sessionStorage.getItem('railwayId') ? sessionStorage.getItem('railwayId') : 5);
 
     const locoShoes     = document.getElementById('locoShoes');
 
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     railway.onchange = async () => {
         const id = railway.value;
-        await renderLocomotiveDepots(locoDepotsArr, id);
+        await renderLocomotiveDepots(locoDepotArr, id);
     }
 
 //endregion
@@ -558,7 +558,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const inp = document.createElement('input');
             inp.type = 'text';
-            inp.placeholder = 'Место остановки';
+            inp.placeholder = 'км.пк / станция, сигнал - T ост || T отпрв';
             inp.required = true;
             inp.value = place;
 
@@ -859,6 +859,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const data = await result.json();
             sessionStorage.setItem('locomotive-depots', JSON.stringify(data));
+            console.log(data);
             return data;
         } catch (err) {
             displayMessage(currentMessage, 'Не удалось загрузить список локомотивных депо', false);
@@ -876,6 +877,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         data
             .slice()
             .filter(d => d.railwayId == id)
+            .sort(d => d.id)
             .forEach(d => {
                 const opt = createOption(d.id, `${d.shortTitle}`);
                 locoDepot.appendChild(opt);

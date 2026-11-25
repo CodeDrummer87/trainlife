@@ -74,6 +74,7 @@ function renderReminder(user) {
     railway_full_title.innerText = user.railwayFullTitle;
 
     const fullName = user.fullName.split(' ');
+    if (fullName.length < 3) return;
     position_and_fullname.innerText =
         `${user.positionAbbreviate} ${fullName[0]} ${fullName[1].charAt(0)}.${fullName[2].charAt(0)}. ` +
         `\nТаб.№ ${user.personnelNumber}, колонна № ${user.numberOfColumn}`;

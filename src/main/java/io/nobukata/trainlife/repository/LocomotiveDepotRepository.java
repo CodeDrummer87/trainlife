@@ -11,11 +11,5 @@ import java.util.List;
 public interface LocomotiveDepotRepository extends JpaRepository<LocomotiveDepot, Long> {
 
     List<LocomotiveDepot> findByRailwayIdAndIsActiveTrue(Long id);
-
-    @Query(value =
-            "SELECT * " +
-            "FROM locomotive_depots " +
-            "ORDER BY split_part(short_title, ' ', 2)",
-            nativeQuery = true)
-    List<LocomotiveDepot> findAllOrderByShortTitle();
+    List<LocomotiveDepot> findAllByIsActiveTrue();
 }

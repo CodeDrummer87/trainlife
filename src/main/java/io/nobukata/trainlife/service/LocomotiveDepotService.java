@@ -27,7 +27,7 @@ public class LocomotiveDepotService {
     }
 
     public List<LocomotiveDepotAbbreviateDto> getAllDepots() {
-        return locomotiveDepotRepository.findAllOrderByShortTitle().stream()
+        return locomotiveDepotRepository.findAllByIsActiveTrue().stream()
                 .map(d -> new LocomotiveDepotAbbreviateDto(
                         d.getId(),
                         d.getShortTitle(),
