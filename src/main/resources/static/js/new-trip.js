@@ -700,9 +700,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         checkComplete();
     }
 
-    async function getStationsWithTurnoutPoint(railwayId) {
+    async function getStationsWithTurnoutPoint(railwayRegionId) {
         try {
-            const result = await fetch(URI + `/stations/railway/${railwayId}/with-turnout-point`, {
+            const result = await fetch(URI + `/stations/railway-region/${railwayRegionId}/with-turnout-point`, {
                 headers: {'Accept': 'application/json'},
                 credentials: 'include'
             });

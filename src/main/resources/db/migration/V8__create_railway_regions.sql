@@ -9,9 +9,9 @@ CREATE TABLE IF NOT EXISTS railway_regions(
 INSERT INTO railway_regions (railway_id, title)
 VALUES
     --- ВСЖД ---
+    (1, 'Иркутский'),
     (1, 'Северобайкальский'),
     (1, 'Тайшетский'),
-    (1, 'Иркутский'),
     (1, 'Улан-Удэнский'),
 
     --- ГЖД ---

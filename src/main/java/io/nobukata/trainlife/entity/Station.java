@@ -19,6 +19,10 @@ public class Station {
     @JoinColumn(name = "railway_id")
     private Railway railway;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "railway_region_id")
+    private RailwayRegion railwayRegion;
+
     @Column(nullable = false, unique = true)
     private String code;
 

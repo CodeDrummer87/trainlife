@@ -20,7 +20,7 @@ public class StationController {
         this.stationService = stationService;
     }
 
-    @GetMapping("/railway/{id}/with-turnout-point")
+    @GetMapping("/railway-region/{id}/with-turnout-point")
     public ResponseEntity<List<StationDto>> getStationsWithTurnoutPoint(@PathVariable Long id) {
         return ResponseEntity.ok(stationService.getStationsByHasTurnoutPointIsTrue(id));
     }

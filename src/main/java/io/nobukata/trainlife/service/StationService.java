@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class StationService {
 
     private final StationRepository stationRepository;
@@ -17,8 +17,8 @@ public class StationService {
         this.stationRepository = stationRepository;
     }
 
-    public List<StationDto> getStationsByHasTurnoutPointIsTrue(Long railwayId) {
-        return stationRepository.findALLByRailwayIdAndHasTurnoutPointIsTrueOrderByTitleAsc(railwayId).stream()
+    public List<StationDto> getStationsByHasTurnoutPointIsTrue(long id) {
+        return stationRepository.findALLByRailwayRegionIdAndHasTurnoutPointIsTrueOrderByTitleAsc(id).stream()
                 .map(s -> new StationDto(
                         s.getId(),
                         s.getTitle(),
@@ -30,8 +30,8 @@ public class StationService {
                 .toList();
     }
 
-    public List<StationDto> getAllStationsByRailwayId(Long railwayId) {
-        return stationRepository.findAllByRailwayIdOrderByTitleAsc(railwayId).stream()
+    public List<StationDto> getAllStationsByRailwayId(long id) {
+        return stationRepository.findAllByRailwayIdOrderByTitleAsc(id).stream()
                 .map(s -> new StationDto(
                         s.getId(),
                         s.getTitle(),
