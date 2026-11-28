@@ -8,6 +8,4 @@ import java.util.List;
 
 @Repository
 public interface RailwayRegionRepository extends JpaRepository<RailwayRegion, Long> {
-
-    List<RailwayRegion> findAllByRailwayId(Long id);
 }

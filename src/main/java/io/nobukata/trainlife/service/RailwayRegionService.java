@@ -18,8 +18,8 @@ public class RailwayRegionService {
     }
 
 
-    public List<RailwayRegionDto> getAllRailwayRegionsByRailwayId(long railwayId) {
-        return railwayRegionRepository.findAllByRailwayId(railwayId).stream()
+    public List<RailwayRegionDto> getAllRailwayRegions() {
+        return railwayRegionRepository.findAll().stream()
                 .map(r -> new RailwayRegionDto(
                         r.getId(),
                         r.getRailway().getId(),

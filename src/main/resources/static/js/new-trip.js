@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const currentMessage= document.getElementById('currentMessage');
-    const railwayArr   = sessionStorage.getItem('railways') ?
+    const railwayList   = sessionStorage.getItem('railways') ?
         JSON.parse(sessionStorage.getItem('railways')) : await loadRailways();
 
 //region .:: R E P O R T :::
@@ -10,15 +10,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     const reportTime    = document.getElementById('reportTime');
     const reportRailway = document.getElementById('reportRailway');
 
-    await renderRailways(railwayArr, reportRailway);
+    await renderRailways(railwayList, reportRailway);
     reportRailway.value = sessionStorage.getItem('railwayId') ? sessionStorage.getItem('railwayId') : 5;
     reportRailway.onchange = async () => {
-        const railwayId = reportRailway.value;
-        await getStationsWithTurnoutPoint(railwayId);
+        await renderRailwayRegions(railwayRegionList, reportRailway.value, railwayRegion);
+        await changeSelectedData();
+    }
+
+    let reportPointList;
+    const railwayRegion = document.getElementById('railwayRegion');
+    const railwayRegionList = sessionStorage.getItem('railway-regions') ?
+        JSON.parse(sessionStorage.getItem('railway-regions')) : await getRailwayRegions(railwayRegion);
+    await renderRailwayRegions(railwayRegionList, reportRailway.value, railwayRegion);
+    railwayRegion.onchange = async () => {
+        await  changeSelectedData();
+    }
+
+    async function changeSelectedData() {
+        reportPointList = await getStationsWithTurnoutPoint(railwayRegion.value, reportPoint);
+        await renderStations(reportPoint, reportPointList);
     }
 
     const reportPoint   = document.getElementById('reportPoint');
-    await getStationsWithTurnoutPoint(sessionStorage.getItem('railwayId') ? sessionStorage.getItem('railwayId') : 5);
+    reportPointList = await getStationsWithTurnoutPoint(railwayRegion.value, reportPoint);
+    await renderStations(reportPoint, reportPointList);
 
     function setCurrentDate(reportDate) {
         const today = new Date();
@@ -76,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const locoNumber    = document.getElementById('locoNumber');
 
     const railway       = document.getElementById('railway');
-    await renderRailways(railwayArr, railway);
+    await renderRailways(railwayList, railway);
     railway.value = sessionStorage.getItem('railwayId') ? sessionStorage.getItem('railwayId') : 5;
 
     const locoDepot     = document.getElementById('locoDepot');
@@ -231,7 +246,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 //region .:: D E P A R T U R E :::
     const depRailway    = document.getElementById('depRailway');
-    await renderRailways(railwayArr, depRailway);
+    await renderRailways(railwayList, depRailway);
     depRailway.value = sessionStorage.getItem('railwayId') ? sessionStorage.getItem('railwayId') : 5;
     const depStation    = document.getElementById('depStation');
     await renderStations(depStation, await getStationsByRailway(depRailway.value));
@@ -532,7 +547,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const rlw = document.createElement('select');
             rlw.required = true;
             rlw.innerHTML = `<option value="" disabled ${station ? '' : 'selected'}>⤷ дороги</option>`;
-            await renderRailways(railwayArr, rlw);
+            await renderRailways(railwayList, rlw);
             rlw.value = sessionStorage.getItem('railwayId');
 
             const sel = document.createElement('select');
@@ -700,7 +715,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         checkComplete();
     }
 
-    async function getStationsWithTurnoutPoint(railwayRegionId) {
+    async function getStationsWithTurnoutPoint(railwayRegionId, select) {
         try {
             const result = await fetch(URI + `/stations/railway-region/${railwayRegionId}/with-turnout-point`, {
                 headers: {'Accept': 'application/json'},
@@ -712,20 +727,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                 throw new Error(`HTTP ${result.status}`);
             }
 
-            const stations = await result.json();
-            await renderStations(reportPoint, stations);
+            return await result.json();
         } catch (err) {
             displayMessage(currentMessage, 'Не удалось загрузить список пунктов явки', false);
-            reportPoint.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
-            reportPoint.disabled = true;
+            select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
+            select.disabled = true;
         }
     }
 
     async function renderStations(select, data) {
         select.replaceChildren();
-        const placeholder = createDefaultOption(data.length === 0 ? 'список пуст' : '⤷ станции');
-        select.appendChild(placeholder);
-
         if (data.length === 0) return;
 
         data
@@ -734,6 +745,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const opt = createOption(r.id, `${r.stationTitle} (${r.railwayAbbreviation})`);
                 select.appendChild(opt);
             });
+        select.selectedIndex = 0;
     }
 
     async function getAllLocomotiveTypes() {
@@ -760,8 +772,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function renderLocomotiveTypes(data) {
         locoType.replaceChildren();
-        const placeholder = createDefaultOption(data.length === 0 ? 'список пуст' : '⤷ тип лок-ва');
-        locoType.appendChild(placeholder);
         if (data.length === 0) return;
 
         data
@@ -770,6 +780,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const opt = createOption(t.id, `${t.title}`);
                 locoType.appendChild(opt);
             });
+        locoType.selectedIndex = 0;
     }
 
     async function getAllLocomotiveSeries() {
@@ -796,8 +807,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function renderLocomotiveSeries(data, id) {
         locoSeries.replaceChildren();
-        const placeholder = createDefaultOption(data.length === 0 ? 'список пуст' : '⤷ серия');
-        locoSeries.appendChild(placeholder);
         if (data.length === 0) return;
 
         data
@@ -807,6 +816,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const opt = createOption(t.id, `${t.title}`);
                 locoSeries.appendChild(opt);
             });
+        locoSeries.selectedIndex = 0;
     }
 
     async function loadRailways() {
@@ -833,8 +843,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function renderRailways(data, select) {
         select.replaceChildren();
-        const placeholder = createDefaultOption(data.length === 0 ? 'список пуст' : '⤷ железная дорога');
-        select.appendChild(placeholder);
         if (data.length === 0) return;
 
         data
@@ -843,6 +851,45 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const opt = createOption(r.id, `${r.abbreviation}`);
                 select.appendChild(opt);
             });
+        select.selectedIndex = 0;
+    }
+
+    async function getRailwayRegions(select) {
+        try {
+            const result = await fetch(URI + '/railway-regions', {
+                headers: {'Accept': 'application/json'},
+                credentials: 'include'
+            });
+
+            if (!result.ok) {
+                displayMessage(currentMessage, 'Ошибка загрузки регионов железной дороги', false);
+                throw new Error(`HTTP: ${result.status}`);
+            }
+
+            const data = await result.json();
+            if (data.length > 0) {
+                sessionStorage.setItem('railway-regions', JSON.stringify(data));
+            }
+            return data;
+        } catch (err) {
+            displayMessage(currentMessage, 'Не удалось загрузить регионы выбранной железной дороги', false);
+            select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
+            select.disabled = true;
+        }
+    }
+
+    async function renderRailwayRegions(data, railwayId, select) {
+        select.replaceChildren();
+        if (data.length === 0) return;
+
+        data
+            .slice()
+            .filter(r => r.railwayId == railwayId)
+            .forEach(r => {
+                const opt = createOption(r.id, `${r.title}`);
+                select.appendChild(opt);
+            });
+        select.selectedIndex = 0;
     }
 
     async function getAllLocomotiveDepots() {
@@ -859,7 +906,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const data = await result.json();
             sessionStorage.setItem('locomotive-depots', JSON.stringify(data));
-            console.log(data);
             return data;
         } catch (err) {
             displayMessage(currentMessage, 'Не удалось загрузить список локомотивных депо', false);
@@ -870,8 +916,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function renderLocomotiveDepots(data, id) {
         locoDepot.replaceChildren();
-        const placeholder = createDefaultOption(data.length === 0 ? 'список пуст' : '⤷ депо приписки');
-        locoDepot.appendChild(placeholder);
         if (data.length === 0) return;
 
         data
@@ -882,6 +926,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const opt = createOption(d.id, `${d.shortTitle}`);
                 locoDepot.appendChild(opt);
             });
+        locoDepot.selectedIndex = 0;
     }
 
     async function evaluateTrainSecuring() {
