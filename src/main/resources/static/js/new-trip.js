@@ -729,15 +729,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             return await result.json();
         } catch (err) {
-            displayMessage(currentMessage, 'Не удалось загрузить список пунктов явки', false);
-            select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
-            select.disabled = true;
+            displayMessage(currentMessage, 'Нет соединения с сервером', false);
         }
     }
 
     async function renderStations(select, data) {
         select.replaceChildren();
-        if (data.length === 0) return;
+        if (!data || data.length === 0) {
+            const option = createDefaultOption('Увы!.. =(');
+            select.appendChild(option);
+            return;
+        }
 
         data
             .slice()
@@ -764,15 +766,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             sessionStorage.setItem('locomotive-types', JSON.stringify(data));
             return data;
         } catch (err) {
-            displayMessage(currentMessage, 'Не удалось загрузить список типов локомотивов', false);
-            locoType.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
-            locoType.disabled = true;
+            displayMessage(currentMessage, 'Нет соединения с сервером', false);
         }
     }
 
     async function renderLocomotiveTypes(data) {
         locoType.replaceChildren();
-        if (data.length === 0) return;
+        if (!data || data.length === 0) {
+            const option = createDefaultOption('Увы!.. =(');
+            locoType.appendChild(option);
+            return;
+        }
 
         data
             .slice()
@@ -799,15 +803,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             sessionStorage.setItem('locomotive-series', JSON.stringify(data));
             return data;
         } catch {
-            displayMessage(currentMessage, 'Не удалось загрузить список серий локомотивов', false);
-            locoSeries.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
-            locoSeries.disabled = true;
+            displayMessage(currentMessage, 'Нет соединения с сервером', false);
         }
     }
 
     async function renderLocomotiveSeries(data, id) {
         locoSeries.replaceChildren();
-        if (data.length === 0) return;
+        if (!data || data.length === 0) {
+            const option = createDefaultOption('Увы!.. =(');
+            locoSeries.appendChild(option);
+            return;
+        }
 
         data
             .slice()
@@ -835,15 +841,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             sessionStorage.setItem('railways', JSON.stringify(data));
             return data;
         } catch (err) {
-            displayMessage(currentMessage, 'Не удалось загрузить список железных дорог', false);
-            railway.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
-            railway.disabled = true;
+            displayMessage(currentMessage, 'Нет соединения с сервером', false);
         }
     }
 
     async function renderRailways(data, select) {
         select.replaceChildren();
-        if (data.length === 0) return;
+        if (!data || data.length === 0) {
+            const option = createDefaultOption('Увы!.. =(');
+            select.appendChild(option);
+            return;
+        }
 
         data
             .slice()
@@ -872,15 +880,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             return data;
         } catch (err) {
-            displayMessage(currentMessage, 'Не удалось загрузить регионы выбранной железной дороги', false);
-            select.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
-            select.disabled = true;
+            displayMessage(currentMessage, 'Нет соединения с сервером', false);
         }
     }
 
     async function renderRailwayRegions(data, railwayId, select) {
         select.replaceChildren();
-        if (data.length === 0) return;
+        if (!data || data.length === 0) {
+            const option = createDefaultOption('Увы!.. =(');
+            locoType.appendChild(option);
+            return;
+        }
 
         data
             .slice()
@@ -908,15 +918,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             sessionStorage.setItem('locomotive-depots', JSON.stringify(data));
             return data;
         } catch (err) {
-            displayMessage(currentMessage, 'Не удалось загрузить список локомотивных депо', false);
-            locoDepot.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
-            locoDepot.disabled = true;
+            displayMessage(currentMessage, 'Нет соединения с сервером', false);
         }
     }
 
     async function renderLocomotiveDepots(data, id) {
         locoDepot.replaceChildren();
-        if (data.length === 0) return;
+        if (!data || data.length === 0) {
+            const option = createDefaultOption('Увы!.. =(');
+            locoDepot.appendChild(option);
+            return;
+        }
 
         data
             .slice()
@@ -963,9 +975,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             return await result.json();
         } catch (err) {
-            displayMessage(currentMessage, 'Не удалось загрузить станции выбранной дороги', false);
-            reportPoint.innerHTML = '<option value="" disabled selected>Ошибка загрузки</option>';
-            reportPoint.disabled = true;
+            displayMessage(currentMessage, 'Нет соединения с сервером', false);
         }
     }
 });
